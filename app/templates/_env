@@ -5,3 +5,4 @@ MAILGUN_DOMAIN=<%= mailgunDomain %><% } else { %>
 # You will need to provide a MAILGUN_API_KEY and MAILGUN_DOMAIN to
 # get email sending working.
 <% } } %>
+NODE_ENV=development

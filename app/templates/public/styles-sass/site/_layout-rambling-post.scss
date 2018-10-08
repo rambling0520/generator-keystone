@@ -1,0 +1,83 @@
+// rambling: 記事ページ
+.rambling-post {
+    p {
+        // text-indent: 1em;
+        margin: 25px 0px 10px 0;
+        font-size: 18px;
+    }
+    ul li {
+        margin: 10px 0px 10px 0;
+        font-size: 18px;
+    }
+    ol li {
+        margin: 10px 0px 10px 0;
+        font-size: 18px;
+    }
+    h4 {
+        font-weight: bolder;
+        line-height: 1.4;
+        margin-top: 50px;
+        background: #f8f8f8;
+        padding: 5px 5px 5px 5px;
+    }
+    h3 {
+        font-size: 16px;
+        color: #3479ba;
+        line-height: 1.4;
+        margin-top: 70px;
+    }
+    h3+h4 {
+        margin-top: 0px;
+    }
+    pre {
+        background-color: #364549;
+        color: #e3e3e3;
+        border: 0px;
+        border-radius: 2px;
+    }
+
+    pre code {
+        white-space: pre;
+    }
+}
+
+.rambling-post-back-to-post-list {
+    margin: 5px 0px -10px 0;
+}
+
+.rambling-post-back-to-post-list-link {
+    font-size: 0.8em;
+    color: gray
+}
+
+.rambling-post-separator {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.rambling-post-content-end{
+    margin-top: 100px;
+}
+
+.rambling-post-title {
+    font-size: 22px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.rambling-other-posts-headline {
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+
+.rambling-post-top-img {
+    margin: 0 auto;
+}
+
+// 記事ページのxx分で読めます表示
+.rambling-post-word-count {
+    font-size: 0.8em;
+    color: #a4b1c1;
+    float: right;
+}

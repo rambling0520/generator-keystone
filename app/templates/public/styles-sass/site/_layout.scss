@@ -1,16 +1,24 @@
-#header {
-	margin-top: 30px;
+// rambling: フェードイン表示
+.rambling-fade-in {
+    animation: fadeIn 1.5s ease 0s 1 normal;
+    -webkit-animation: fadeIn 1.5s ease 0s 1 normal;
 }
 
-#footer {
-	margin-top: 30px;
-	border-top: 1px solid #eeeeee;
-	padding-top: 30px;
-	color: #777777;
+@keyframes fadeIn {
+    20% {
+        opacity: 0.2
+    }
+    100% {
+        opacity: 1
+    }
 }
 
-.gallery-image img{
-    display: block;
-    max-width: 100%;
-    height: auto;
+@-webkit-keyframes fadeIn {
+    20% {
+        opacity: 0.2
+    }
+    100% {
+        opacity: 1
+    }
 }
+

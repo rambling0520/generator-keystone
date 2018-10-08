@@ -1,25 +1,70 @@
 extends ../layouts/default
 
+//- rambling: include mixin
+include ../mixins/rambling-breadcrumbs
+
 block intro
 	.container
-		h1 Gallery
+
+		h1.rambling-h1 サイトプロフィール
 	
 block content
-	.container
-		if galleries.length
-			each gallery in galleries
-				h2= gallery.name
+
+	//- rambling: カルーセル
+	if ramblingNumGalleryCarousel > 0
+		.worksslider.inside.margin-bottom-control
+			div(id="rambling-carousel-gallery" class="carousel slide" data-ride="carousel" data-interval="7000")
+				//- Indicators
+				ol(class="carousel-indicators")
+					- var n = 0
+					while n < ramblingNumGalleryCarousel
+						if n == 0
+							li(data-target="#rambling-carousel-gallery" data-slide-to=n class="active")
+						else 
+							li(data-target="#rambling-carousel-gallery" data-slide-to=n)
+						- n++
+
+				//- Wrapper for slides
+				div(class="carousel-inner" role="listbox")
+					- var n = 0
+					while n < ramblingNumGalleryCarousel
+						if n == 0
+							div(class="item active")
+								img.center-block(src='/images/profile/carousel_' + n + '.jpg' alt='carousel img #' + n width="750" height="450")
+						else 
+							div(class="item")
+								img.center-block(src='/images/profile/carousel_' + n + '.jpg' alt='carousel img #' + n width="750" height="450")
+						- n++
+
+				//- Controls
+				a(class="left carousel-control" href="#rambling-carousel-gallery" role="button" data-slide="prev")
+					span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
+					span(class="sr-only") Previous
+				a(class="right carousel-control" href="#rambling-carousel-gallery" role="button" data-slide="next")
+					span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
+					span(class="sr-only") Next
+
+	if galleries.length
+		each gallery in galleries
+			h2.rambling-gallery-headline= gallery.name
+				//- rambling: set dateFormat
 					if gallery.publishedDate
 						.pull-right.text-muted= gallery._.publishedDate.format('Do MMM YYYY')
-				
-				.row.gallery-images
-					if gallery.heroImage.exists
-						.col-sm-4.col-md-4.gallery-image: img(src=gallery._.heroImage.limit(680,680)).img-rounded
-						.col-sm-8.col-md-8: .row
-							each image in gallery.images
-								.col-xs-4.col-sm-4.col-md-3.gallery-image: img(src=image.limit(300,300)).img-rounded
-					else
+				if gallery.publishedDate
+					h5.text-muted.rambling-lead= gallery._.publishedDate.format(ramblingDateFormat)
+			.row.gallery-images
+				if gallery.heroImage.exists
+					.col-sm-4.col-md-4.gallery-image: img(src=gallery._.heroImage.limit(680,680)).img-rounded
+					.col-sm-8.col-md-8: .row
 						each image in gallery.images
-							.col-xs-6.col-sm-4.col-md-3.gallery-image: img(src=image.limit(300,300)).img-rounded
-		else
-			h3.text-muted There are no image galleries yet.
+							.col-xs-4.col-sm-4.col-md-3.gallery-image: img(src=image.limit(300,300)).img-rounded
+				else
+					each image in gallery.images
+						.col-xs-6.col-sm-4.col-md-3.gallery-image: img(src=image.limit(300,300)).img-rounded
+			.rambling-gallery-description: p!=gallery.description
+			hr.rambling-post-separator
+	else
+		h3.text-muted There are no image galleries yet.
+	
+	//- rambling: パンくず設定
+	+rambling-breadcrumbs

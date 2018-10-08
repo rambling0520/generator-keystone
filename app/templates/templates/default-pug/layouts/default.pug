@@ -1,20 +1,38 @@
 include ../mixins/flash-messages
 
+//- rambling: include mixin
+include ../mixins/rambling-html-head
+include ../mixins/rambling-json-ld
+include ../mixins/rambling-footer-nav
+include ../mixins/rambling-sp-footer-menu
+include ../mixins/rambling-sidebar-category-list
+include ../mixins/rambling-sidebar-author-profile
+include ../mixins/rambling-sidebar-published-month-list
+include ../mixins/rambling-sidebar-new-post-list
+include ../mixins/rambling-sidebar-reference-link-list
+
 doctype html
 html
 
 	//- HTML HEADER
 	head
+		
+		//- rambling: Google Tag Manger用のmixinを読み込み (要設定&本番環境でのみ表示)
+		if ramblingIsGtmEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-head-gtm.html
+
 		meta(charset="utf-8")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
 		meta(http-equiv="X-UA-Compatible" content="IE=edge")
 
-		title= title || '<%= projectName %>'
+		//- rambling: titleの設定ロジックは独自実装するのでコメントアウト
+			title= title || 'RamblingCMS'
+			
 		link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
 
-		//- Customise the stylesheet for your site by editing /public/styles/site.<% if (preprocessor === 'less') { %>less
-		//- All .less files will be automatically compiled and minified in production.<% } else { %>sass<% } %>
-		link(href="/styles/site<% if (preprocessor === 'less') { %>.min<% } %>.css", rel="stylesheet")
+		//- Customise the stylesheet for your site by editing /public/styles/site.sass
+		//- rambling: リビジョン番号をGETパラメータとして付与（キャッシュクリア対策）
+		link(href='/styles/site.css?rev=' + ramblingRevision, rel="stylesheet")
 
 		//- This file provides the default styling for the KeystoneJS Content Editor
 		if user && user.canAccessKeystone
@@ -33,14 +51,39 @@ html
 		//- Add any other template-specific HEAD tags by extending the head block
 		block head
 
+		//- rambling: font awsomeを読み込み
+		link(href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet")
+
+		//- rambling: Basic tableのスタイルを読み込み
+		if ramblingIsBasicTableEnabled
+			link(href="/styles/basictable/basictable.css" rel="stylesheet")
+
+		//- rambling: mixin rambling-html-head
+		+rambling-html-head
+
+		//- rambling: Google Analytics用のHTMLをインクルード (要設定&本番環境でのみ表示)
+		if ramblingIsGaEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-head-ga.html
+
+		//- rambling: アドセンス用のHTMLをインクルード (要設定&本番環境でのみ表示)
+		if ramblingIsAdsenseEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-head-adsense.html
+
 	//- HTML BODY
 	body
+
+		//- rambling: Google Tag Manger用のmixinを読み込み (要設定&本番環境でのみ表示)
+		if ramblingIsGtmEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-body-gtm.html
 
 		//- HEADER
 		#header: .container
 
 			//- Customise your site's navigation by changing the navLinks Array in ./routes/middleware.js
 			//- ... or completely change this header to suit your design.
+
+			//- rambling: テーマテキストの設定
+			div: p.text-muted.rambling-theme-text=ramblingSiteThemeText
 
 			div(role="navigation").navbar.navbar-default
 				.container-fluid
@@ -50,21 +93,24 @@ html
 							span.icon-bar
 							span.icon-bar
 							span.icon-bar
-						a.navbar-brand(href='/') <%= _projectName %>
+						//- rambling: サイトタイトルをヘッダーリンクに設定
+						a.navbar-brand(href='/')=ramblingSiteTitle
 					.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-left
 							each link in navLinks
 								li(class=(section == link.key ? 'active' : null)): a(href=link.href)= link.label
-						ul.nav.navbar-nav.navbar-right
-							if user
-								if user.canAccessKeystone
-									li: a(href='/keystone') Open Keystone
-								li: a(href='/keystone/signout') Sign Out
-							else
-								li: a(href='/keystone/signin') Sign In
+						//- rambling: sign in を非表示とする
+							ul.nav.navbar-nav.navbar-right
+								if user
+									if user.canAccessKeystone
+										li: a(href='/keystone') Open Keystone
+									li: a(href='/keystone/signout') Sign Out
+								else
+									li: a(href='/keystone/signin') Sign In
 
 		//- BODY
-		#body
+		//- rambling: フェードイン処理を追加
+		#body.rambling-fade-in
 
 			//- NOTE:
 			//- There is no .container wrapping class around body blocks to allow more flexibility in design.
@@ -78,15 +124,48 @@ html
 			+flash-messages(messages)
 
 			//- The content block should contain the body of your template's content
-			block content
+			.container: .row
+				#main.col-sm-8.col-md-9
+					block content
+
+				//- rambling: サイトバー領域
+				if ramblingIsSidebarAuthorProfileDisplayed || ramblingIsSidebarNewPostListDisplayed || ramblingIsSidebarCategoryListDisplayed || ramblingIsSidebarPublishedMonthListDisplayed || ramblingIsSidebarReferenceLinkListDisplayed
+					#sidebar.col-sm-4.col-md-3
+						//- rambling: サイト制作者のプロフィール
+						if ramblingIsSidebarAuthorProfileDisplayed
+							+rambling-sidebar-author-profile
+
+						//- rambling: 
+						if ramblingIsSidebarReferenceLinkListDisplayed
+							+rambling-sidebar-reference-link-list
+
+						//- rambling: 新着記事
+						if ramblingIsSidebarNewPostListDisplayed
+							+rambling-sidebar-new-post-list
+
+						//- ramgbling: サイドバーに表示するカテゴリの一覧
+						if ramblingIsSidebarCategoryListDisplayed
+							+rambling-sidebar-category-list
+
+						//- rambling: サイドバーに表示する公開月の一覧
+						if ramblingIsSidebarPublishedMonthListDisplayed
+							+rambling-sidebar-published-month-list
+
 
 
 		//- FOOTER
-		.container: #footer
+		//- オリジナルのfooterをコメントアウト
+		//- .container: #footer
 
 			//- You don't _have_ to include a link saying your site is powered by KeystoneJS, but we appreciate it!
-			p Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.
+			//- rambling: powered by keystoneを非表示
+			//- p Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.
 
+		//- rambling: フッターリンクを表示
+		+rambling-footer-nav
+
+		//- rambling: SP画面向けアプリ風アイコンメニュー
+		+rambling-sp-footer-menu
 
 		//- JAVASCRIPT
 
@@ -106,5 +185,28 @@ html
 
 		//- Add scripts that are globally required by your site here.
 
+		//- rambling: Cloudinary jQueryプラグインを読み込み
+		if ramblingIsCloudinaryResponsiveImgEnabled
+			script(src='/js/cloudinary/cloudinary-jquery.min.js')
+
+		//- rambling: Basic table jQueryプラグインを読み込み
+		if ramblingIsBasicTableEnabled
+			script(src='/js/basictable/jquery.basictable.min.js')
+
 		//- Include template-specific javascript files by extending the js block
 		block js
+
+		//- rambling: UI操作用のスクリプトを読み込み
+		//- rambling: リビジョン番号をGETパラメータとして付与（キャッシュクリア対策）
+		script(src='/js/rambling-ui.js?rev=' + ramblingRevision)
+
+		//- rambling: Cloudinary jQueryプラグインの初期化 & 画像のレスポンシブ対応
+		if ramblingIsCloudinaryResponsiveImgEnabled
+			script(type="text/javascript")!='$.cloudinary.config({"cloud_name":"' + ramblingCloudinaryCloudName +'"});$.cloudinary.responsive();'
+
+		//- rambling: Basic tableの初期化処理
+		if ramblingIsBasicTableEnabled
+			script(type="text/javascript")!='$("table.table").basictable();'
+
+		//- rambling: json-ld構築用のmixinを利用
+		+rambling-json-ld

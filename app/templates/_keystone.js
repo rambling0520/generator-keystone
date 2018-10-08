@@ -49,6 +49,34 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': '<%= userModel %>',
+	// rambling: set WYSISYG editor options
+	'wysiwyg images': true, // Adds an image button which enables including images from other URLS in your WYSIWYG Editor.
+	'wysiwyg menubar': true, // Show the menubar for wysiwyg editor.
+	'wysiwyg additional plugins': 'searchreplace, textcolor, preview, table, media, codesample', // Allows for additional plugins.
+	'wysiwyg additional buttons': 'searchreplace, forecolor backcolor, preview, table, media, codesample', // Allows to add additional extra functionality buttons.
+	'wysiwyg additional options': {
+		codesample_languages: [
+			{text: 'HTML/XML', value: 'markup'},
+			{text: 'JavaScript', value: 'javascript'},
+			{text: 'CSS', value: 'css'},
+			{text: 'PHP', value: 'php'},
+			{text: 'Ruby', value: 'ruby'},
+			{text: 'Python', value: 'python'},
+			{text: 'Java', value: 'java'},
+			{text: 'C', value: 'c'},
+			{text: 'C#', value: 'csharp'},
+			{text: 'C++', value: 'cpp'},
+			{text: 'Pug', value: 'pug'} 
+		], // Allows for additional TinyMCE options.
+		paste_as_text: true, 
+		forced_root_block : "", 
+		force_br_newlines : true, 
+		force_p_newlines : true, 
+		relative_urls : false, 
+		convert_urls: false
+	},
+	// rambling: アクセスログ（morgan）のフォーマットを指定
+	"logger": ':remote-user [:date[iso]] :remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
 });
 <% if (includeGuideComments) { %>
 // Load your project's Models
@@ -89,5 +117,121 @@ if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
 	+ '\nset up your mailgun integration');
 }
 <% } %>
+
+// rambling: log4jsの初期化
+var log4js = require('log4js');
+var log4jsConfig = require('./ramblingLog4jsConfig').config;
+log4js.configure(log4jsConfig);
+
+var logger = log4js.getLogger('keystone');
+console.log = logger.info.bind(logger);
+console.info = logger.info.bind(logger);
+console.error = logger.error.bind(logger);
+console.warn = logger.warn.bind(logger);
+logger.info('log4js logger を初期化しました');
+
+// rambling: set profiles
+var ramblingProfiles = require('./ramblingProfiles').props;
+
+keystone.set('ramblingSiteTitle', ramblingProfiles.siteTitle);
+keystone.set('ramblingBaseUrl', (keystone.get('env') == 'production') ? ramblingProfiles.prodDomain : ramblingProfiles.devDomain);
+keystone.set('ramblingSiteTitleSeparator', ramblingProfiles.siteTitleSeparator);
+keystone.set('ramblingSiteDescription', ramblingProfiles.siteDescription);
+keystone.set('ramblingSiteKeywords', ramblingProfiles.siteKeywords);
+keystone.set('ramblingSiteThemeText', ramblingProfiles.siteThemeText);
+keystone.set('ramblingDateFormat', ramblingProfiles.dateFormat);
+keystone.set('ramblingAuthorName', ramblingProfiles.authorName);
+keystone.set('ramblingAuthorImageUrl', ramblingProfiles.authorImageUrl);
+keystone.set('ramblingRevision', ramblingProfiles.revision);
+
+// rambling: Google Analytics、Google AdSenseの設定
+keystone.set('ramblingIsGaEnabled', ramblingProfiles.isGaEnabled);
+keystone.set('ramblingIsAdsenseEnabled', ramblingProfiles.isAdsenseEnabled);
+
+// rambling: トップページの表示制御用の変数
+keystone.set('ramblingNumTopNewPostList', ramblingProfiles.numTopNewPostList);
+keystone.set('ramblingTextTopEyecatch', ramblingProfiles.textTopEyecatch);
+
+// rambling: 記事ページの表示制御用の変数
+keystone.set('ramblingNumPostNewPostList', ramblingProfiles.numPostNewPostList);
+
+// rambling: サイドバー表示制御用の変数
+keystone.set('ramblingIsSidebarAuthorProfileDisplayed', ramblingProfiles.isSidebarAuthorProfileDisplayed);
+keystone.set('ramblingIsSidebarNewPostListDisplayed', ramblingProfiles.isSidebarNewPostListDisplayed);
+keystone.set('ramblingNumSidebarNewPostList', ramblingProfiles.numSidebarNewPostList);
+keystone.set('ramblingIsSidebarCategoryListDisplayed', ramblingProfiles.isSidebarCategoryListDisplayed);
+keystone.set('ramblingIsSidebarPublishedMonthListDisplayed', ramblingProfiles.isSidebarPublishedMonthListDisplayed);
+keystone.set('ramblingIsSidebarReferenceLinkListDisplayed', ramblingProfiles.isSidebarReferenceLinkListDisplayed);
+
+// rambling: サイドバーのプロフィールにあるリンクの表示制御
+keystone.set('ramblingIsSidebarProfileLinkRssDisplayed', ramblingProfiles.isSidebarProfileLinkRssDisplayed);
+keystone.set('ramblingIsSidebarProfileLinkGithubDisplayed', ramblingProfiles.isSidebarProfileLinkGithubDisplayed);
+keystone.set('ramblingUrlSidebarProfileLinkGithub', ramblingProfiles.urlSidebarProfileLinkGithub);
+keystone.set('ramblingIsSidebarProfileLinkLinkedinDisplayed', ramblingProfiles.isSidebarProfileLinkLinkedinDisplayed);
+keystone.set('ramblingUrlSidebarProfileLinkLinkedin', ramblingProfiles.urlSidebarProfileLinkLinkedin);
+
+// rambling: ギャラリーページ上部にあるカルーセルの画像数
+keystone.set('ramblingNumGalleryCarousel', ramblingProfiles.numGalleryCarousel);
+
+// rambling: サイトマップ送信処理の要否
+keystone.set('ramblingIsSitemapPublished', ramblingProfiles.isSitemapPublished);
+
+// rambling: SPフッターメニューのおすすめリンク
+keystone.set('ramblingSpRecommendedLink', ramblingProfiles.spRecommendedLink);
+
+// rambling: 記事ページの文字数カウント&xx分で読めます表示の設定
+keystone.set('ramblingIsPostWordCountEnabled', ramblingProfiles.isPostWordCountEnabled);
+
+// rambling: WebSubサーバーへの送信処理の要否とWebSubサーバーのURL
+keystone.set('ramblingIsWebSubPublished', ramblingProfiles.isWebSubPublished);
+keystone.set('ramblingWebSubUrl', ramblingProfiles.webSubUrl);
+
+// rambling: HTTPS通信の強制要否
+keystone.set('ramblingIsHttpsForced', ramblingProfiles.isHttpsForced);
+
+// rambling: SNSシェアボタンの表示制御
+keystone.set('ramblingIsFacebookDisplayed', ramblingProfiles.isFacebookDisplayed);
+keystone.set('ramblingIsTwitterDisplayed', ramblingProfiles.isTwitterDisplayed);
+keystone.set('ramblingIsGoogleplusDisplayed', ramblingProfiles.isGoogleplusDisplayed);
+keystone.set('ramblingIsHatenabookmarkDisplayed', ramblingProfiles.isHatenabookmarkDisplayed);
+keystone.set('ramblingIsPocketDisplayed', ramblingProfiles.isPocketDisplayed);
+keystone.set('ramblingIsFeedlyDisplayed', ramblingProfiles.isFeedlyDisplayed);
+keystone.set('ramblingIsLineDisplayed', ramblingProfiles.isLineDisplayed);
+
+// rambling: ampページの表示制御
+keystone.set('ramblingIsAmpEnabled', ramblingProfiles.isAmpEnabled);
+
+// rambling: Google Tag Mangerの設定
+keystone.set('ramblingIsGtmEnabled', ramblingProfiles.isGtmEnabled);
+keystone.set('ramblingIsGtmAmpEnabled', ramblingProfiles.isGtmAmpEnabled);
+
+// rambling: Cloudinary画像のレスポンシブ対応
+keystone.set('ramblingIsCloudinaryResponsiveImgEnabled', ramblingProfiles.isCloudinaryResponsiveImgEnabled);
+keystone.set('ramblingCloudinaryCloudName', ramblingProfiles.cloudinaryCloudName);
+
+// rambling: Basic tableの利用設定
+keystone.set('ramblingIsBasicTableEnabled', ramblingProfiles.isBasicTableEnabled);
+
+// rambling: set profiles (end)
+
+// rambling: init node-cache
+let ramblingCacheProvider = require('./routes/ramblingCacheProvider');
+ramblingCacheProvider.start(function(err) {
+    if (err) console.error(err);
+});
+
+// rambling: XmlSitemapのping送信処理を開始
+if (ramblingProfiles.isSitemapPublished){
+	let ramblingXmlSitemapPublisher = require('./routes/ramblingXmlSitemapPublisher');
+	ramblingXmlSitemapPublisher.startCronJob(keystone);
+	logger.info('XmlSitemapのping送信ジョブを開始しました');
+}
+
+// rambling: WebSubサーバーへのpost送信処理を開始
+if (ramblingProfiles.isWebSubPublished){
+	let ramblingWebSubPublisher = require('./routes/ramblingWebSubPublisher');
+	ramblingWebSubPublisher.startCronJob(keystone);
+	logger.info('WebSubサーバーへのpost送信ジョブを開始しました');
+}
 
 keystone.start();

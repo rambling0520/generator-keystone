@@ -1,0 +1,17 @@
+extends ../layouts/default
+
+//- rambling: include mixin
+include ../mixins/rambling-breadcrumbs
+
+block intro
+	.container
+
+		h1.rambling-h1 プライバシーポリシー
+	
+block content
+
+	//- rambling: プライバシーポリシーコンテンツをインクルード
+	include ../includes/rambling-privacy-policy-content.pug
+	
+	//- rambling: パンくず設定
+	+rambling-breadcrumbs

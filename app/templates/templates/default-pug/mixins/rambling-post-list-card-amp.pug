@@ -1,0 +1,34 @@
+//- rambling: 記事一覧に表示する記事カード
+
+mixin rambling-post-list-card-amp(post)
+	//- rambling: list-group-itemを設定
+	.post.rambling-post-list-card
+		h2.rambling-post-headline: a(href='/blog/post/' + post.slug)= post.title
+		p.text-muted.rambling-lead Posted 
+			//- rambling: set dateFormat
+			if post.publishedDate
+				| on #{post._.publishedDate.format(ramblingDateFormat)} 
+			if post.categories && post.categories.length
+				| in 
+				each cat, i in post.categories
+					a(href='/blog/' + cat.key)= cat.name
+					if i < post.categories.length - 1
+						| , 
+					else
+						|  
+			//- rambling: authorを表示しない
+				if post.author
+					| by #{post.author.name.first}
+		ul.rambling-post-list-card-inner.list-reset.flex.justify-start.items-center.m0.mb4
+			li.rambling-post-list-card-inner-item.mr2
+				if post.image.exists
+					//- rambling: 画像サイズを変更
+					a(href='/blog/post/' + post.slug)
+						amp-img.rambling-amp-img(layout="fixed" width="100" height="100" src=post._.image.fit(100,160,{secure:true}) alt=post.title).
+			li.rambling-post-list-card-inner-item.mr2
+				//- rambling: 記事一覧に表示される文字数を70に変更
+				if post.content.brief
+					- var excerptBrief = post.content.brief.substring(0,70)
+					p.rambling-excerpt-brief!= excerptBrief + '…'
+				if post.content.extended
+					p.read-more: a(href='/blog/post/' + post.slug) Read more...

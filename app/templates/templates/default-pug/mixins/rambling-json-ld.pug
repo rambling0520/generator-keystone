@@ -1,0 +1,104 @@
+//- 構造化データを設定する
+mixin rambling-json-ld
+
+    //- サイト制作者のプロフィール情報
+    - var jsonldAuthorName = ramblingAuthorName
+    - var jsonldProfileUrl = ramblingBaseUrl+'gallery'
+    - var jsonldProfileImageUrl = ramblingAuthorImageUrl
+
+    //- jsonld格納用の変数
+    - var jsonld = ''
+
+    //- json-ld (top page)
+    if section == 'home'
+
+        //- json-ld用の変数定義
+        - var jsonldBrief = ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle
+        - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+
+        - jsonld = ramblingBuildJsonLdOfHome(ramblingBaseUrl, ramblingSiteTitle, jsonldBrief, jsonldImageUrl, jsonldAuthorName, jsonldProfileUrl, jsonldProfileImageUrl)
+        script(type='application/ld+json')!=jsonld
+
+    else if section == 'blog'
+        //- json-ld (記事ページ)
+        if data.post
+            //- json-ld用の変数定義
+            - var jsonldPostUrl = data.post.ramblingFullPostUrl
+            - var jsonldTitle = data.post.title + ramblingSiteTitleSeparator + ramblingSiteTitle
+            - var jsonldBrief = data.post.brief + ramblingSiteTitleSeparator + ramblingSiteTitle
+
+            //- keywords
+            - var postKeywords = ''
+            each item, index in data.post.categories
+                meta(property="article:tag" content=item.name)
+                - postKeywords = item.name + ',' + postKeywords
+            - var jsonldPostKeywords = postKeywords + ramblingSiteKeywords
+            - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+            - var jsonldDatePublished = data.post.publishedDate
+            - var jsonldDateModified = data.post.publishedDate
+            - var jsonldUrlBreadcrumbs1 = ramblingBaseUrl
+            - var jsonldUrlBreadcrumbs2 = ramblingBaseUrl + 'blog'
+
+            //- json-ld（BlogPosting）構築
+            - jsonld = ramblingBuildJsonLdOfPost(ramblingBaseUrl, jsonldPostUrl, jsonldProfileUrl, jsonldProfileImageUrl, jsonldTitle, jsonldBrief, jsonldPostKeywords, jsonldImageUrl, jsonldDatePublished, jsonldDateModified, jsonldAuthorName, jsonldUrlBreadcrumbs1, jsonldUrlBreadcrumbs2)
+            script(type='application/ld+json')!=jsonld
+
+        //- json-ld (記事一覧ページ)
+        else
+            if data.category
+                //- 記事一覧ページ（カテゴリ指定あり）
+
+                //- json-ld用の変数定義
+                - var jsonldUrl = ramblingBaseUrl + 'blog/' + data.category.key + '/'
+                - var jsonldTitle = '記事一覧' + '（' + data.category.name + '）' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                - var jsonldBrief = '記事一覧' + '（' + data.category.name + '）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle
+                - var jsonldPostKeywords = '記事一覧' + ',' + data.category.name + ',' + ramblingSiteKeywords
+                - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+                - var jsonldUrlBreadcrumbs1 = ramblingBaseUrl
+
+                - jsonld = ramblingBuildJsonLdOfPostList(ramblingBaseUrl, jsonldUrl, jsonldTitle, jsonldBrief, jsonldImageUrl, jsonldAuthorName, jsonldProfileUrl, jsonldProfileImageUrl, jsonldUrlBreadcrumbs1)
+                script(type='application/ld+json')!=jsonld
+
+            else
+                //- 記事一覧ページ（カテゴリ指定無し）
+
+                //- json-ld用の変数定義
+                - var jsonldUrl = ramblingBaseUrl + 'blog'
+                - var jsonldTitle = '記事一覧' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                - var jsonldBrief = '記事一覧' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle
+                - var jsonldPostKeywords = '記事一覧' + ramblingSiteKeywords
+                - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+                - var jsonldUrlBreadcrumbs1 = ramblingBaseUrl
+
+                - jsonld = ramblingBuildJsonLdOfPostList(ramblingBaseUrl, jsonldUrl, jsonldTitle, jsonldBrief, jsonldImageUrl, jsonldAuthorName, jsonldProfileUrl, jsonldProfileImageUrl, jsonldUrlBreadcrumbs1)
+                script(type='application/ld+json')!=jsonld
+
+    //- json-ld (gallery)
+    else if section == 'gallery'
+
+        //- json-ld用の変数定義
+        - var jsonldUrl = ramblingBaseUrl + 'gallery'
+        - var jsonldTitle = 'ギャラリーページ' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        - var jsonldBrief = 'ギャラリーページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle
+        - var jsonldPostKeywords = '記事一覧' + ramblingSiteKeywords
+        - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+        - var jsonldUrlBreadcrumbs1 = ramblingBaseUrl
+
+        - jsonld = ramblingBuildJsonLdOfGallery(ramblingBaseUrl, jsonldUrl, jsonldTitle, jsonldBrief, jsonldImageUrl, jsonldAuthorName, jsonldProfileUrl, jsonldProfileImageUrl, jsonldUrlBreadcrumbs1)
+        script(type='application/ld+json')!=jsonld
+
+    //- json-ld (contact)
+    else if section == 'contact'
+
+        //- json-ld用の変数定義
+        - var jsonldUrl = ramblingBaseUrl + 'contact'
+        - var jsonldTitle = 'コンタクトページ' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        - var jsonldBrief = 'コンタクトページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle
+        - var jsonldPostKeywords = 'コンタクトページ' + ramblingSiteKeywords
+        - var jsonldImageUrl = ramblingBaseUrl + 'images/logo.png'
+        - var jsonldUrlBreadcrumbs1 = ramblingBaseUrl
+
+        - jsonld = ramblingBuildJsonLdOfContact(ramblingBaseUrl, jsonldUrl, jsonldTitle, jsonldBrief, jsonldImageUrl, jsonldAuthorName, jsonldProfileUrl, jsonldProfileImageUrl, jsonldUrlBreadcrumbs1)
+        script(type='application/ld+json')!=jsonld
+
+

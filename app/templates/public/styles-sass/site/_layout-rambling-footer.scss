@@ -1,0 +1,61 @@
+#footer {
+    margin-top: 30px;
+    border-top: 1px solid #eeeeee;
+    padding-top: 30px;
+    color: #777777;
+}
+
+// rambling: フッターナビゲーション
+#footer {
+    margin-top: 30px;
+    padding-top: 10px;
+    padding-bottom: 60px;
+    background-color: #f8f8f8
+}
+
+.rambling-footer-nav-row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.rambling-footer-nav-link {
+    margin-top: 2px;
+    margin-bottom: 1px;
+    a {
+        color: darkgray;
+    }
+}
+
+// rambling: SP表示時のアプリ風アイコンメニュー
+.rambling-sp-footer-menu {}
+
+.rambling-sp-footer-menu-ion {
+    display: table;
+    width: 100%;
+    padding-left: 0px;
+    padding-top: 5px;
+    margin-bottom: 0px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 100;
+}
+
+.rambling-sp-footer-menu-ion-item {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.rambling-sp-footer-menu-ion-item-label {
+    font-size: 50%
+}
+
+// rambling: コピーライト
+.rambling-copyrights {
+    text-align: center;
+    font-size: 75%;
+    color: #999999;
+    margin-top: 10px;
+}

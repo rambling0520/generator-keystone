@@ -1,0 +1,8 @@
+//- rambling: サイドバーに表示するカテゴリの一覧
+mixin rambling-sidebar-category-list
+    h6.rambling-sidebar-title 記事カテゴリの一覧
+    .list-group
+        a(href='/blog', class=!data.category ? 'active' : false).list-group-item 全てのカテゴリ
+        if data.categories
+            each cat in data.categories
+                a(href='/blog/' + cat.key, class=data.category && data.category.id == cat.id ? 'active' : false).list-group-item= cat.name

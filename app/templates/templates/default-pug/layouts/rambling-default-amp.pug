@@ -1,0 +1,171 @@
+include ../mixins/flash-messages
+
+//- rambling: include mixin
+include ../mixins/rambling-html-head
+include ../mixins/rambling-json-ld
+include ../mixins/rambling-footer-nav
+
+doctype html
+html(amp)
+
+	//- HTML HEADER
+	head
+	    
+		//- 文字コードはutf-8のみ可
+		meta(charset="utf-8")
+
+		//- その他の設定
+		link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+		meta(name='viewport' content='width=device-width,minimum-scale=1,initial-scale=1')
+
+		//- AMP boilerplate
+		style(amp-boilerplate).
+			body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}
+		noscript
+			style(amp-boilerplate).
+				body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}
+
+		//- 要素のスタイルを設定する（別ファイルからインクルード）
+		style(amp-custom)
+			include ../../public/styles/rambling-site-amp.css
+
+		//- rambling: mixin rambling-html-head
+		+rambling-html-head
+
+		//- rambling: json-ld構築用のmixinを利用
+		+rambling-json-ld
+
+		//- amp-social-share
+		script(async, custom-element='amp-social-share' src='https://cdn.ampproject.org/v0/amp-social-share-0.1.js')
+
+		//- amp-sidebar
+		script(async custom-element='amp-sidebar' src='https://cdn.ampproject.org/v0/amp-sidebar-0.1.js')
+
+		//- amp-accordion
+		script(async custom-element='amp-accordion' src='https://cdn.ampproject.org/v0/amp-accordion-0.1.js')
+
+		//- amp-fit-text
+		script(async custom-element='amp-fit-text' src='https://cdn.ampproject.org/v0/amp-fit-text-0.1.js')
+
+		//- HEADタグの最後の要素とする。これによって AMP JS ライブラリがインクルードされ、読み込まれる
+		script(src='https://cdn.ampproject.org/v0.js', async)
+
+		//- Google Tag Mangerのタグをインクルード (要設定&本番環境でのみ表示)
+		if ramblingIsGtmAmpEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-head-gtm-amp.html
+
+	//- HTML BODY
+	body.container.pl2.pr2
+
+		//- Google Tag Mangerのタグをインクルード (要設定&本番環境でのみ表示)
+		if ramblingIsGtmAmpEnabled && ramblingEnv == 'production'
+			include ../includes/rambling-html-body-gtm-amp.html
+
+		//- AMP Sidebar
+		amp-sidebar(id="header-sidebar" class="ampstart-sidebar px3 md-hide lg-hide" layout="nodisplay")
+			//- サイドバーを閉じる×
+			div(class="flex justify-start items-center ampstart-sidebar-header")
+				div(role="button" on="tap:header-sidebar.toggle" tabindex="0" class=" items-start") ✕
+			
+			hr.rambling-post-separator
+			//- 各ページへのリンク
+			nav(class="ampstart-sidebar-nav ampstart-nav")
+				ul(class="list-reset m0 p0 ampstart-label")
+					if data.ramblingFooterNavCats && data.ramblingFooterNavCats.length
+						li(class="ampstart-nav-item ampstart-nav-dropdown relative")
+							//- Start Dropdown-inline
+							amp-accordion(layout="container" disable-session-states="" class="ampstart-dropdown" animate)
+								section(expanded)
+									header 記事カテゴリ
+									ul(class="ampstart-dropdown-items list-reset m0 p0")
+										each cat in data.ramblingFooterNavCats
+											li(class="ampstart-dropdown-item")
+												a(href='/blog/' + cat.key)= cat.name
+							//- End Dropdown-inline
+					each link in navLinks
+						li(class="ampstart-nav-item")
+							a(href=link.href)= link.label
+					
+				ul(class="ampstart-social-follow list-reset flex justify-around items-center flex-wrap m0 mb4")
+					li(class="mr2")
+						a(href='https://twitter.com/intent/tweet?text=' + data.post.title + '&url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank' class="inline-block")
+							svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+								title Twitter
+								path(d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-.139 9.237c.209 4.617-3.234 9.765-9.33 9.765-1.854 0-3.579-.543-5.032-1.475 1.742.205 3.48-.278 4.86-1.359-1.437-.027-2.649-.976-3.066-2.28.515.098 1.021.069 1.482-.056-1.579-.317-2.668-1.739-2.633-3.26.442.246.949.394 1.486.411-1.461-.977-1.875-2.907-1.016-4.383 1.619 1.986 4.038 3.293 6.766 3.43-.479-2.053 1.08-4.03 3.199-4.03.943 0 1.797.398 2.395 1.037.748-.147 1.451-.42 2.086-.796-.246.767-.766 1.41-1.443 1.816.664-.08 1.297-.256 1.885-.517-.439.656-.996 1.234-1.639 1.697z" class="ampstart-icon ampstart-icon-twitter")
+					li(class="mr2")
+						a(href='https://www.facebook.com/sharer/sharer.php?u=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank' class="inline-block")
+							svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+								title Facebook
+								path(d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" class="ampstart-icon ampstart-icon-fb")
+					li(class="mr2")
+						a(href='https://plus.google.com/share?url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank' class="inline-block")
+							svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+								title googleplus
+								path(d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-10.333 16.667c-2.581 0-4.667-2.087-4.667-4.667s2.086-4.667 4.667-4.667c1.26 0 2.313.46 3.127 1.22l-1.267 1.22c-.347-.333-.954-.72-1.86-.72-1.593 0-2.893 1.32-2.893 2.947s1.3 2.947 2.893 2.947c1.847 0 2.54-1.327 2.647-2.013h-2.647v-1.6h4.406c.041.233.074.467.074.773-.001 2.666-1.787 4.56-4.48 4.56zm11.333-4h-2v2h-1.334v-2h-2v-1.333h2v-2h1.334v2h2v1.333z" class="ampstart-icon")
+
+			hr.rambling-post-separator
+			//- プロフィール
+			h6.rambling-sidebar-title サイト制作者について
+			.rambling-self-portrait
+				a(href=ramblingBaseUrl+'gallery')
+					amp-img(src=ramblingAuthorImageUrl alt="picture" width="160" height="160" layout="fixed")
+			.rambling-mynameis: a(href=ramblingBaseUrl+'gallery')=ramblingAuthorName + 'のプロフィール'
+			.rambling-profile-links
+				ul(class="ampstart-social-follow list-reset flex justify-around items-center flex-wrap m0 mb4")
+					if ramblingIsSidebarProfileLinkRssDisplayed
+						li(class="mr2")
+							a(href=ramblingBaseUrl + 'feed.rss' target='_blank' class="inline-block")
+								svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+									title rss
+									path(d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-12.832 20c-1.197 0-2.168-.969-2.168-2.165s.971-2.165 2.168-2.165 2.167.969 2.167 2.165-.97 2.165-2.167 2.165zm5.18 0c-.041-4.029-3.314-7.298-7.348-7.339v-3.207c5.814.041 10.518 4.739 10.561 10.546h-3.213zm5.441 0c-.021-7.063-5.736-12.761-12.789-12.792v-3.208c8.83.031 15.98 7.179 16 16h-3.211z" class="ampstart-icon")
+					if ramblingIsSidebarProfileLinkGithubDisplayed
+						li(class="mr2")
+							a(href=ramblingUrlSidebarProfileLinkGithub rel="nofollow" target='_blank' class="inline-block")
+								svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64.000000 64.000000")
+									title github
+									path(d="M22.4 1.4C-.8 9-7.4 38.4 10.5 54.9 14.7 58.8 20.4 62 23 62c.5 0 1-1.6 1-3.5 0-3.3-.2-3.5-3.5-3.5-3.5 0-4.2-.5-9-6.6-4.4-5.6-2.3-6.2 3.2-.9 4.2 4 7.5 4.5 9.8 1.2 1.4-2.1 1.4-2.2-.7-3-6-2.3-8.8-4.2-10.2-7.2-2.1-4.3-2.1-12.4 0-15.3.8-1.2 1.2-2.7.9-3.2-1-1.6.5-7 1.8-7 .7 0 2.4.6 3.8 1.4 1.7.9 6 1.4 11.9 1.4s10.2-.5 11.9-1.4c1.4-.8 3.1-1.4 3.8-1.4 1.3 0 2.8 5.4 1.8 7-.3.5.1 2 .9 3.2 1.8 2.5 2.1 10.3.7 14.1-1.4 3.6-5 6.6-9.3 7.8-3.3.9-3.7 1.2-2.8 2.9.5 1 1 4.6 1 7.9 0 3.5.4 6.1 1 6.1 5.2 0 15.8-8.8 19.8-16.5 2.3-4.3 2.7-6.3 2.7-13.5 0-7-.4-9.4-2.4-13.5C57.9 12.2 51.8 6 45.6 3 39.6.2 28.5-.6 22.4 1.4z" class="ampstart-icon")
+					if ramblingIsSidebarProfileLinkLinkedinDisplayed
+						li(class="mr2")
+							a(href=ramblingUrlSidebarProfileLinkLinkedin rel="nofollow" target='_blank' class="inline-block")
+								svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+									title LinkedIn
+									path(d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" class="ampstart-icon")
+	
+		//- HEADER
+		#header
+			//- rambling: テーマテキストの設定
+			p.text-muted.rambling-theme-text=ramblingSiteThemeText
+
+			//- Start Navbar 
+			header(class="ampstart-headerbar flex justify-between items-center top-0 left-0 right-0 pl2 pr2")
+				a.navbar-brand(href='/')
+					amp-fit-text(max-font-size="18" width="200" height="33" layout="fixed")=ramblingSiteTitle
+				div(role="button" on="tap:header-sidebar.toggle" tabindex="0" class="ampstart-navbar-trigger lg-hide pr1") ☰
+				//- ナビゲーションメニュー
+				nav(class="ampstart-headerbar-nav ampstart-nav xs-hide sm-hide md-hide")
+					ul(class="list-reset center m0 p0 flex justify-center nowrap")
+						each link in navLinks
+							li(class="ampstart-nav-item")
+								a(href=link.href)= link.label
+
+		//- BODY
+		#body
+
+			//- NOTE:
+			//- There is no .container wrapping class around body blocks to allow more flexibility in design.
+			//- Remember to include it in your templates when you override the intro and content blocks!
+
+			//- The Intro block appears above flash messages (used for temporary information display)
+			block intro
+
+			//- Flash messages allow you to display once-off status messages to users, e.g. form
+			//- validation errors, success messages, etc.
+			+flash-messages(messages)
+
+			//- The content block should contain the body of your template's content
+			.container
+				#main
+					block content
+
+		//- rambling: フッターリンクを表示
+		+rambling-footer-nav

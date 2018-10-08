@@ -1,7 +1,7 @@
 {
-  "name": "generator-keystone",
-  "version": "0.5.1",
-  "description": "A KeystoneJS Project Generator for Yeoman",
+  "name": "generator-ramblingcms-on-keystonejs",
+  "version": "1.0.0-beta.1",
+  "description": "A RamblingCMS (Customized KeystoneJS Project) Generator for Yeoman",
   "keywords": [
     "yeoman-generator",
     "keystonejs",
@@ -15,16 +15,16 @@
     "site",
     "blog"
   ],
-  "homepage": "https://github.com/keystonejs/generator-keystone",
-  "bugs": "https://github.com/keystonejs/generator-keystone/issues",
+  "homepage": "https://github.com/rambling0520/generator-ramblingcms-on-keystonejs",
+  "bugs": "https://github.com/rambling0520/generator-ramblingcms-on-keystonejs/issues",
   "author": {
-    "name": "Jed Watson",
-    "url": "https://github.com/JedWatson"
+    "name": "rambling0520",
+    "url": "https://github.com/rambling0520"
   },
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/keystonejs/generator-keystone.git"
+    "url": "https://github.com/rambling0520/generator-ramblingcms-on-keystonejs.git"
   },
   "scripts": {
     "lint": "eslint .",

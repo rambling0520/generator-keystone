@@ -1,0 +1,32 @@
+//- rambling: SPにて画面最下部にアプリ風のアイコンメニューを表示
+mixin rambling-sp-footer-menu
+    .rambling-sp-footer-menu.visible-xs-block
+        ul.rambling-sp-footer-menu-ion
+            li.rambling-sp-footer-menu-ion-item
+                a(href=ramblingBaseUrl)
+                    i.fa.fa-home(area-hidden="true")
+                    br
+                    span.rambling-sp-footer-menu-ion-item-label ホーム
+            li.rambling-sp-footer-menu-ion-item
+                a(href=ramblingBaseUrl+'blog')
+                    i.fas.fa-list-ul(area-hidden="true")
+                    br
+                    span.rambling-sp-footer-menu-ion-item-label 記事一覧
+            li.rambling-sp-footer-menu-ion-item
+                a(href=ramblingBaseUrl+ramblingSpRecommendedLink)
+                    i.fas.fa-star(area-hidden="true")
+                    br
+                    span.rambling-sp-footer-menu-ion-item-label おすすめ
+            li.rambling-sp-footer-menu-ion-item
+                a(href=ramblingBaseUrl+'gallery')
+                    i.fas.fa-user(area-hidden="true")
+                    br
+                    span.rambling-sp-footer-menu-ion-item-label 自己紹介
+            li.rambling-sp-footer-menu-ion-item
+                a#rambling-page-top-btn(href="#")
+                    i.fa.fa-chevron-up(area-hidden="true")
+                    br
+                    span.rambling-sp-footer-menu-ion-item-label トップへ
+
+    
+

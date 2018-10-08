@@ -1,0 +1,42 @@
+//- rambling: 記事ページ下部のシェアボタン
+mixin rambling-post-sharing-buttons
+
+	if data.post
+		section.rambling-post-share
+			h6.rambling-post-share-spacer この記事をシェアする
+			ul.rambling-post-share-ion
+				//- facebook
+				if ramblingIsFacebookDisplayed
+					li.rambling-post-share-ion-item: a(href='https://www.facebook.com/sharer/sharer.php?u=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+						img(src='/images/share/facebook.svg' width="24" alt="facebook sharing button").img-responsive.rambling-post-share-ion-item-img
+
+				//-twitter
+				if ramblingIsTwitterDisplayed
+					li.rambling-post-share-ion-item: a(href='https://twitter.com/intent/tweet?text=' + data.post.title + '&url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+						img(src='/images/share/twitter.svg' width="24" alt="twitter sharing button").img-responsive.rambling-post-share-ion-item-img
+				
+				//- google-plus
+				if ramblingIsGoogleplusDisplayed
+					li.rambling-post-share-ion-item: a(href='https://plus.google.com/share?url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+						img(src='/images/share/google-plus.svg' width="24" alt="google plus sharing button").img-responsive.rambling-post-share-ion-item-img
+
+				//- hatena bookmark
+				if ramblingIsHatenabookmarkDisplayed
+					li.rambling-post-share-ion-item: a(href='http://b.hatena.ne.jp/add?mode=confirm&url=' + data.post.ramblingFullPostUrl + '&title=' + data.post.title rel="nofollow" target='_blank')
+						img(src='/images/share/hatenabookmark.svg' width="24" alt="hatena sharing button").img-responsive.rambling-post-share-ion-item-img
+				
+				//- pocket
+				if ramblingIsPocketDisplayed
+					li.rambling-post-share-ion-item: a(href='http://getpocket.com/edit?url=' + data.post.ramblingFullPostUrl + '&title=' + data.post.title rel="nofollow" target='_blank')
+						img(src='/images/share/pocket.svg' width="24" alt="pocket sharing button").img-responsive.rambling-post-share-ion-item-img
+
+				//- feedly
+				if ramblingIsFeedlyDisplayed
+					li.rambling-post-share-ion-item: a(href='https://feedly.com/i/subscription/feed/' + ramblingBaseUrl + 'feed.atom' rel="nofollow" target='_blank')
+						img(src='/images/share/feedly.svg' width="24" alt="feedly sharing button").img-responsive.rambling-post-share-ion-item-img
+
+				//- line（LINEで送る）
+				if ramblingIsLineDisplayed
+					li.rambling-post-share-ion-item: a(href='https://social-plugins.line.me/lineit/share?url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+						img(src='/images/share/line.svg' width="24" alt="line sharing button").img-responsive.rambling-post-share-ion-item-img
+

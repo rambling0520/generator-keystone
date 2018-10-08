@@ -1,23 +1,26 @@
 extends ../layouts/default
 
+//- rambling: include mixin
+include ../mixins/rambling-post-sharing-buttons
+include ../mixins/rambling-post-content
+include ../mixins/rambling-post-list-card
+
 block content
-	.container: .jumbotron
-		img(src='/images/logo.svg', width='160')
-		h1 Welcome
-		p This is your new <a href='http://keystonejs.com' target='_blank'>KeystoneJS</a> website.
-		p It includes the latest versions of
-			| <a href='http://getbootstrap.com/' target='_blank'>Bootstrap</a>
-			| and <a href='http://www.jquery.com/' target='_blank'>jQuery</a>.
-		p Visit the <a href='http://keystonejs.com/guide' target='_blank'>Getting Started</a> guide to learn how to customise it.
-		hr
-		if user && user.canAccessKeystone
-			p
-				a(href='/keystone').btn.btn-lg.btn-primary Open the Admin UI
-		else
-			p We have created a default Admin user for you with the email <strong><%= adminLogin %></strong> and the password <strong><%= adminPassword %></strong>.
-			p
-				a(href='/keystone/signin', style='margin-right: 10px').btn.btn-lg.btn-primary Sign in
-				|  to use the Admin UI.
-		hr
-		p Remember to <a href='https://github.com/keystonejs/keystone' target='_blank'>Star KeystoneJS on GitHub</a> and
-			| <a href='https://twitter.com/keystonejs' target='_blank'>follow @keystonejs</a> on twitter for updates.
+		
+	//- rambling: トップページ上部のアイキャッチコンテンツをインクルード
+	include ../includes/rambling-top-eyecatch.pug
+
+	//- rambling: 記事ページコンテンツ
+	h4 最新の記事
+	+rambling-post-content
+
+	//- rambling: SNSシェアボタン
+	+rambling-post-sharing-buttons
+
+	hr.rambling-post-separator
+
+	//- rambling: その他の新着記事
+	h4.rambling-other-posts-headline その他の新着記事
+	.blog.list-group
+	each post in data.posts
+		+rambling-post-list-card(post)

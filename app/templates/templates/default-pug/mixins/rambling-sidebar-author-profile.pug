@@ -1,0 +1,24 @@
+//- rambling: サイドバーに表示するサイト制作者のプロフィール
+mixin rambling-sidebar-author-profile
+
+    //- rambling: プロファイル変数からリンクを設定
+    
+    h6.rambling-sidebar-title サイト制作者について
+    .rambling-self-portrait
+        a(href=ramblingBaseUrl+'gallery')
+            img(src=ramblingAuthorImageUrl alt="picture" width="160", height="160")
+    .rambling-mynameis: a(href=ramblingBaseUrl+'gallery')=ramblingAuthorName + 'のプロフィール'
+    .rambling-profile-links
+        ul
+            if ramblingIsSidebarProfileLinkRssDisplayed
+                li
+                    a(href=ramblingBaseUrl + 'feed.rss' target='_blank')
+                        i.fas.fa-rss-square=' rss'
+            if ramblingIsSidebarProfileLinkGithubDisplayed
+                li
+                    a(href=ramblingUrlSidebarProfileLinkGithub rel="nofollow" target='_blank')
+                        i.fab.fa-github=' github'
+            if ramblingIsSidebarProfileLinkLinkedinDisplayed
+                li
+                    a(href=ramblingUrlSidebarProfileLinkLinkedin rel="nofollow" target='_blank')
+                        i.fab.fa-linkedin=' LinkedIn'

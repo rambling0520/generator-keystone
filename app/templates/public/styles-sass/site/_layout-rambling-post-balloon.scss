@@ -1,0 +1,115 @@
+// 記事ページの吹き出しデザイン(共通）
+.rambling-post-balloon {}
+
+.rambling-post-balloon-flexbox {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+}
+
+.rambling-post-balloon-speaker-img {
+    margin: 1em 0 5px 0px;
+}
+
+.rambling-post-balloon-speaker-name {
+    font-size: 0.5em;
+    text-align: center;
+}
+
+p.rambling-post-balloon-text {
+    margin: 0;
+    padding: 5px;
+}
+
+// 記事ページの吹き出しデザイン(左画像）
+.rambling-post-balloon-left-speaker {
+    padding: 10px;
+    order: 1;
+}
+
+.rambling-post-balloon-left-content {
+    padding: 10px;
+    order: 2;
+}
+
+.rambling-post-balloon-left-balloon {
+    position: relative;
+    display: inline-block;
+    margin: 1em 0 1em 15px;
+    padding: 7px 10px;
+    min-width: 120px;
+    max-width: 100%; // color: #555;
+    // font-size: 16px;
+    background: #FFF;
+    border: solid 3px #dddddd;
+    box-sizing: border-box;
+}
+
+.rambling-post-balloon-left-balloon:before {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: -24px;
+    margin-top: -12px;
+    border: 12px solid transparent;
+    border-right: 12px solid #FFF;
+    z-index: 2;
+}
+
+.rambling-post-balloon-left-balloon:after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: -30px;
+    margin-top: -14px;
+    border: 14px solid transparent;
+    border-right: 14px solid #dddddd;
+    z-index: 1;
+}
+
+// 記事ページの吹き出しデザイン(右画像）
+.rambling-post-balloon-right-speaker {
+    padding: 10px;
+    order: 2;
+}
+
+.rambling-post-balloon-right-content {
+    padding: 10px;
+    order: 1;
+}
+
+.rambling-post-balloon-right-balloon {
+    position: relative;
+    display: inline-block;
+    margin: 1em 15px 1em 0;
+    padding: 7px 10px;
+    min-width: 120px;
+    max-width: 100%; // color: #555;
+    // font-size: 16px;
+    background: #FFF;
+    border: solid 3px #dddddd;
+    box-sizing: border-box;
+}
+
+.rambling-post-balloon-right-balloon:before {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: -24px;
+    margin-top: -12px;
+    border: 12px solid transparent;
+    border-left: 12px solid #FFF;
+    z-index: 2;
+}
+
+.rambling-post-balloon-right-balloon:after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: -30px;
+    margin-top: -14px;
+    border: 14px solid transparent;
+    border-left: 14px solid #dddddd;
+    z-index: 1;
+}

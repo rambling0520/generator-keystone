@@ -1,0 +1,40 @@
+// rambling: 一覧ページ
+.rambling-post-list-card {
+    padding-top: 4px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-top: 20px;
+}
+
+.rambling-post-headline {
+    margin-top: 5px;
+    font-size: 24px;
+}
+
+.rambling-post-list-card-inner {
+    display: table;
+    width: 100%;
+    background: #FFF;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.rambling-post-list-card-inner-item {
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+    padding-right: 10px;
+    img {
+        padding-top: 10px;
+    }
+}
+
+.rambling-lead {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+}
+
+.rambling-excerpt-brief~p {
+    font-size: 0.9em;
+    color: #a4b1c1;
+}

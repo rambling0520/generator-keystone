@@ -15,6 +15,8 @@ Gallery.add({
 	publishedDate: { type: Date, default: Date.now },
 	heroImage: { type: Types.CloudinaryImage },
 	images: { type: Types.CloudinaryImages },
+	// rambling: descriptionを追加
+	description: { type: Types.Html, wysiwyg: true, height: 400 }
 });
 
 Gallery.register();

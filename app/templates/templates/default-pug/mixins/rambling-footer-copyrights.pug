@@ -1,0 +1,9 @@
+//- rambling: コピーライト用のmixin
+mixin rambling-footer-copyrights
+        .rambling-copyrights='copyrights(c) ' + ramblingAuthorName + '.'
+
+        //- rambling: powered by keystoneを非表示
+        .rambling-copyrights='Powered by '
+                a(href="https://github.com/rambling0520/generator-ramblingcms-on-keystonejs" rel="nofollow" target="_blank")='RamblngCMS'
+                =' on '
+                a(href="https://keystonejs.com" rel="nofollow" target="_blank")='KeystoneJS.'

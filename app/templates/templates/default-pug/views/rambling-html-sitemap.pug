@@ -1,0 +1,60 @@
+extends ../layouts/default
+
+//- rambling: include mixin
+include ../mixins/rambling-breadcrumbs
+
+block intro
+	.container
+
+		h1.rambling-h1 サイトマップ
+	
+block content
+
+	//- rambling: HTMLサイトマップを表示
+
+	//- rambling: トップページ
+	p: a(href="/" target="_blank") ホーム
+
+	//- rambling: ギャラリーページ
+	if data.ramblingGalleryPageLinks && data.ramblingGalleryPageLinks.length
+		each v, i in data.ramblingGalleryPageLinks
+			p: a(href=v target="_blank") プロフィール
+
+	//- rambling: コンタクトページ
+	if data.ramblingContactPageLinks && data.ramblingContactPageLinks.length
+		each v, i in data.ramblingContactPageLinks
+			p: a(href=v target="_blank") お問い合わせ
+
+	//- rambling: プライバシーポリシーページ
+	p: a(href="/privacy-policy" target="_blank") プライバシーポリシー
+
+	//- rambling: 記事一覧ページ
+	p: a(href="/blog" target="_blank") 記事一覧（全件）
+
+	//- rambling: 記事一覧ページ（掲載月）
+	if data.ramblingPostListPubMonthPageLinks && data.ramblingPostListPubMonthPageLinks.length
+		hr.rambling-post-separator
+		p 記事一覧ページ（掲載月別）
+		ul
+			each v, i in data.ramblingPostListPubMonthPageLinks
+				- var yearMonth = v.replace('/blog/pub-ym/','').slice(0,4) + '年' + v.replace('/blog/pub-ym/','').slice(4,6) + '月掲載の記事一覧'
+				li: p: a(href=v target="_blank")=yearMonth
+
+	//- rambling: 記事一覧ページ（カテゴリ）
+	if data.ramblingPostListCategoryPageLinks && Object.keys(data.ramblingPostListCategoryPageLinks).length
+		hr.rambling-post-separator
+		p 記事一覧ページ（カテゴリ別）
+		ul
+			each val, key in data.ramblingPostListCategoryPageLinks
+				li: p: a(href=key target="_blank")='カテゴリ：' + val + 'の記事一覧'
+
+	//- rambling: 記事ページ
+	if data.ramblingPostPageLinks && Object.keys(data.ramblingPostPageLinks).length
+		hr.rambling-post-separator
+		p 記事ページ
+		ul
+			each val, key in data.ramblingPostPageLinks
+				li: p: a(href=key target="_blank")=val
+
+	//- rambling: パンくず設定
+	+rambling-breadcrumbs

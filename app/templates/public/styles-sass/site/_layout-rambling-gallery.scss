@@ -1,0 +1,21 @@
+// rambling: ギャラリーページ
+.rambling-gallery-headline {
+    margin-top: 15px;
+    font-size: 24px;
+}
+
+.rambling-gallery-description {
+    p {
+        // text-indent: 1em;
+        margin: 25px 0px 10px 0;
+        font-size: 18px;
+    }
+    li {
+        margin: 10px 0px 10px 0;
+        font-size: 18px;
+    }
+    h4 {
+        font-weight: bolder;
+        line-height: 1.4;
+    }
+}

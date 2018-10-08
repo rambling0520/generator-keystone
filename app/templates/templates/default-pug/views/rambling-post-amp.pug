@@ -1,0 +1,77 @@
+extends ../layouts/rambling-default-amp
+
+//- rambling: include mixin
+include ../mixins/rambling-post-content-amp
+include ../mixins/rambling-post-list-card-amp
+
+block content
+	//- rambling: 記事一覧へ戻るのテキストを変更
+	div.rambling-post-back-to-post-list
+		if ramblingPostListReferrer
+			a.rambling-post-back-to-post-list-link(href=ramblingPostListReferrer)='記事一覧へ'
+		else
+			a.rambling-post-back-to-post-list-link(href='/blog')='記事一覧へ'
+
+	hr.rambling-post-separator
+	
+	//- rambling: 記事ページコンテンツ
+	+rambling-post-content-amp
+
+	//- rambling: SNSシェアボタン
+	section.rambling-post-share
+		h6.rambling-post-share-spacer この記事をシェアする
+		ul(class="ampstart-social-follow list-reset flex justify-around items-center flex-wrap m0 mb4")
+			//- facebook
+			if ramblingIsFacebookDisplayed
+				li(class="mr1"): a(href='https://www.facebook.com/sharer/sharer.php?u=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+					amp-img(src='/images/share/facebook.svg' height="24" width="24" alt="facebook sharing button").img-responsive.rambling-post-share-ion-item-img
+
+			//-twitter
+			if ramblingIsTwitterDisplayed
+				li(class="mr1"): a(href='https://twitter.com/intent/tweet?text=' + data.post.title + '&url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+					amp-img(src='/images/share/twitter.svg' height="24" width="24" alt="twitter sharing button").img-responsive.rambling-post-share-ion-item-img
+			
+			//- google-plus
+			if ramblingIsGoogleplusDisplayed
+				li(class="mr1"): a(href='https://plus.google.com/share?url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+					amp-img(src='/images/share/google-plus.svg' height="24" width="24" alt="google plus sharing button").img-responsive.rambling-post-share-ion-item-img
+
+			//- hatena bookmark
+			if ramblingIsHatenabookmarkDisplayed
+				li(class="mr1"): a(href='http://b.hatena.ne.jp/add?mode=confirm&url=' + data.post.ramblingFullPostUrl + '&title=' + data.post.title rel="nofollow" target='_blank')
+					amp-img(src='/images/share/hatenabookmark.svg' height="24" width="24" alt="hatena sharing button").img-responsive.rambling-post-share-ion-item-img
+			
+			//- pocket
+			if ramblingIsPocketDisplayed
+				li(class="mr1"): a(href='http://getpocket.com/edit?url=' + data.post.ramblingFullPostUrl + '&title=' + data.post.title rel="nofollow" target='_blank')
+					amp-img(src='/images/share/pocket.svg' height="24" width="24" alt="pocket sharing button").img-responsive.rambling-post-share-ion-item-img
+
+			//- feedly
+			if ramblingIsFeedlyDisplayed
+				li(class="mr1"): a(href='https://feedly.com/i/subscription/feed/' + ramblingBaseUrl + 'feed.atom' rel="nofollow" target='_blank')
+					amp-img(src='/images/share/feedly.svg' height="24" width="24" alt="feedly sharing button").img-responsive.rambling-post-share-ion-item-img
+
+			//- line（LINEで送る）
+			if ramblingIsLineDisplayed
+				li(class="mr1"): a(href='https://social-plugins.line.me/lineit/share?url=' + data.post.ramblingFullPostUrl rel="nofollow" target='_blank')
+					amp-img(src='/images/share/line.svg' height="24" width="24" alt="line sharing button").img-responsive.rambling-post-share-ion-item-img
+
+	
+	//- rambling: パンくず設定
+	- var ramblingBreadcrumbNameOfTop = 'Home'
+	- var ramblingBreadcrumbNameOfPost = '記事一覧'
+	nav.breadcrumb
+		a.breadcrumb-item.rambling-breadcrumbs-link(href="/")=ramblingBreadcrumbNameOfTop
+		a.breadcrumb-item.rambling-breadcrumbs-link(href="/blog")='＞' + ramblingBreadcrumbNameOfPost
+		span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + data.post.title
+	
+
+	hr.rambling-post-separator
+
+	//- rambling: その他の新着記事
+	if data.posts
+		h4.rambling-other-posts-headline 同カテゴリの新着記事
+		.blog
+		each post in data.posts
+			+rambling-post-list-card-amp(post)
+

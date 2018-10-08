@@ -1,0 +1,31 @@
+// rambling: 記事ページ下部のシェアボタン
+.rambling-post-share {
+    // position: absolute;
+    // bottom: 0rem;
+    // right: 0;
+    position: static;
+    float: none; // width: 300px;
+}
+
+.rambling-post-share-ion {
+    display: table;
+    width: 100%;
+    background: #FFF;
+    padding-left: 0px;
+}
+
+.rambling-post-share-ion-item {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.rambling-post-share-ion-item-img {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+.rambling-post-share-spacer {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}

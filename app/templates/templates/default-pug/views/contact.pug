@@ -1,34 +1,58 @@
 extends ../layouts/default
 
+//- rambling: include mixin
+include ../mixins/rambling-breadcrumbs
+
 block intro
 	.container
-		h1 Contact Us
+
+		h1.rambling-h1 お問い合わせ
 		
 block content
-	.container
-		if enquirySubmitted
-			h3 Thanks for getting in touch.
-		else
-			.row: .col-sm-8.col-md-6
-				form(method='post')
-					input(type='hidden', name='action', value='contact')
-					.form-group(class=validationErrors.name ? 'has-error' : null)
-						label Name
-						input(type='text', name='name.full', value=formData['name.full']).form-control
-					.form-group(class=validationErrors.email ? 'has-error' : null)
-						label Email
-						input(type='email', name='email', value=formData.email).form-control
-					.form-group
-						label Phone
-						input(type='text', name='phone', value=formData.phone, placeholder='(optional)').form-control
-					.form-group(class=validationErrors.enquiryType ? 'has-error' : null)
-						label What are you contacting us about?
-						select(name='enquiryType').form-control
-							option(value='') (select one)
-							each type in enquiryTypes
-								option(value=type.value, selected=formData.enquiryType == type.value)= type.label
-					.form-group(class=validationErrors.message ? 'has-error' : null)
-						label Message
-						textarea(name='message', placeholder='Leave us a message...' rows=4).form-control= formData.message
-					.form-actions
-						button(type='submit').btn.btn-primary Send
+	if enquirySubmitted
+		//- rambling: 問い合わせ送信後の表示メッセージを変更
+		h3.rambling-enquirySubmitted-message お問い合わせありがとうございます。<br/>回答にお時間を頂く場合がございますが、あらかじめご了承下さい。
+
+		//- rambling: パンくず設定
+		+rambling-breadcrumbs
+		
+	else
+		form(method='post')
+			input(type='hidden', name='action', value='contact')
+			.form-group(class=validationErrors.name ? 'has-error' : null)
+				//- rambling: ラベル名称を変更
+				label お名前
+				input(type='text', name='name.full', value=formData['name.full'] required).form-control
+			.form-group(class=validationErrors.email ? 'has-error' : null)
+				//- rambling: ラベル名称を変更
+				label メールアドレス
+				input(type='email', name='email', value=formData.email required).form-control
+			//- rambling: 電話番号の入力フォームを利用しない
+			//- .form-group
+			//- 	label Phone
+			//- 	input(type='text', name='phone', value=formData.phone, placeholder='(optional)').form-control
+			.form-group(class=validationErrors.enquiryType ? 'has-error' : null)
+				//- rambling: ラベル名称を変更
+				label 問い合わせ種別
+				select(name='enquiryType' required).form-control
+					//- rambling: 未選択状態の表示テキストを変更
+					option(value='') 選択してください
+					each type in enquiryTypes
+						option(value=type.value, selected=formData.enquiryType == type.value)= type.label
+			.form-group(class=validationErrors.message ? 'has-error' : null)
+				//- rambling: ラベル名称を変更
+				label 本文
+				//- rambling: プレイスホルダーを変更
+				textarea(name='message', placeholder='メッセージを入力下さい...' rows=4 required).form-control= formData.message
+			.form-actions
+				//- rambling: 送信ボタンの名称を変更
+				button(type='submit').btn.btn-primary プライバシーポリシーに同意して送信
+		
+		//- rambling: プライバシーポリシーへのリンクを設定
+		p.rambling-contact-praivacy-policy-link
+			i.far.fa-question-circle=' '
+			a(href="/privacy-policy" target="_blank") プライバシーポリシーはこちら
+			span からご確認下さい
+
+		//- rambling: パンくず設定
+		+rambling-breadcrumbs

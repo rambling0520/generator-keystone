@@ -15,10 +15,11 @@ Enquiry.add({
 	name: { type: Types.Name, required: true },
 	email: { type: Types.Email, required: true },
 	phone: { type: String },
+	// rambling: 問い合わせ種別を日本語化
 	enquiryType: { type: Types.Select, options: [
-		{ value: 'message', label: 'Just leaving a message' },
-		{ value: 'question', label: 'I\'ve got a question' },
-		{ value: 'other', label: 'Something else...' },
+		{ value: 'message', label: '管理人へのメッセージ' },
+		{ value: 'question', label: 'サイトや記事に関する質問' },
+		{ value: 'other', label: 'その他' },
 	] },
 	message: { type: Types.Markdown, required: true },
 	createdAt: { type: Date, default: Date.now },

@@ -1,0 +1,52 @@
+//- rambling: 記事コンテンツを表示する
+
+mixin rambling-post-content-amp
+    article
+        if !data.post
+            h2 記事が存在しません。
+        else
+            header
+                //- rambling: トップページではH1が重複しないようにH2タグとする
+                if section == 'home'
+                    h2.rambling-post-title= data.post.title
+                else
+                    h1.rambling-post-title= data.post.title
+                //- rambling: 記事メタ情報の表示を変更
+                h5.lead.text-muted.rambling-lead Posted 
+                    //- rambling: set dateFormat
+                    if data.post.publishedDate
+                        | on #{data.post._.publishedDate.format(ramblingDateFormat)} 		
+                    if data.post.categories && data.post.categories.length
+                        | in 
+                        each cat, cat_i in data.post.categories
+                            a(href='/blog/' + cat.key)= cat.name
+                            if cat_i < data.post.categories.length - 1
+                                | , 
+                            else
+                                |  
+                    if data.post.author
+                        | by #{data.post.author.name.first}
+            .post.rambling-post
+                if data.post.image.exists
+                    .image-wrap: amp-img.rambling-amp-img(layout="responsive" width="750" height="450" src=data.post._.image.fit(750,450,{secure:true}) alt=data.post.title+' アイキャッチ画像').img-responsive.rambling-post-top-img
+
+                //- ramblng: サマリとしてのbriefを表示
+                != data.post.content.brief
+
+                //- rambling: 目次用のIDをが付与されたHTMLと目次用のHTMLを取得
+                - var retObj = ramblingBuildPostTableOfContents(data.post.content.extended);
+                
+                //- rambling: 目次を表示
+                //-!= JSON.stringify(retObj.htmlToc)
+                !=　retObj.htmlToc
+
+                //- 目次リンク生成後のメインコンテンツHTMLを取得
+                - var retHtml = retObj.htmlContentsEdited
+
+                //- rambling: サムネイル付きリンクを生成、Amazonリンクを生成（AMPページ用）
+                - retHtml = ramblingBuildPostThumbnailLinksAMP(retHtml)
+
+                //- メインコンテンツを出力
+                != retHtml
+                
+        hr.rambling-post-separator.rambling-post-content-end

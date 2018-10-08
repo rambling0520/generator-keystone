@@ -1,0 +1,31 @@
+// rambling: 記事ページの目次
+#rambling-post-toc-container {
+    margin-top: 30px;
+    margin-bottom: 40px;
+    >ul {
+        list-style: none;
+        padding-left: 20px;
+        padding-right: 15px;
+    }
+}
+
+p.rambling-post-toc-title {
+    // text-align: center;
+    // font-weight: bold;
+    font-size: 16px;
+    color: #3479ba;
+}
+
+.rambling-post-toc-list {
+    border: 1px solid #3479ba;
+    padding-bottom: 15px;
+    >li {
+        padding-top: 15px;
+    }
+}
+
+.rambling-post-toc-list-item {
+    li {
+        font-size: 16px;
+    }
+}

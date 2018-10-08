@@ -1,0 +1,23 @@
+//- rambling: サイドバーに表示する新着記事のリスト
+mixin rambling-sidebar-new-post-list
+
+    //- 新着記事の説明に表示する文字数の設定 （写真の有無に応じて4行で収める）
+    - var ommitedBriefLengthWithPic = 25
+    - var ommitedBriefLength = 45
+
+    h6.rambling-sidebar-title 新着記事
+    .list-group
+        each newPost in data.ramblingNewPostsSb
+            a(href='/blog/post/' + newPost.slug, class=).list-group-item.rambling-sidebar-new-post-list-card
+                h4=newPost.title
+                ul.rambling-sidebar-new-post-list
+                    if newPost.content.brief
+                        - var excerptBrief = ""
+                        if newPost.image.exists
+                            - excerptBrief = newPost.content.brief.substring(0,ommitedBriefLengthWithPic)
+                        else 
+                            - excerptBrief = newPost.content.brief.substring(0,ommitedBriefLength)
+                        li.rambling-sidebar-new-post-list-item.rambling-new-post-brief!=excerptBrief + '…'
+                    if newPost.image.exists
+                        li.rambling-sidebar-new-post-list-item
+                            img(src=newPost.image.secure_url width="80", height="80" alt=newPost.title).rambling-new-post-eyecatch

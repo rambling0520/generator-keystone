@@ -1,0 +1,8 @@
+//- rambling: サイドバーに表示する記事の公開月の一覧
+mixin rambling-sidebar-published-month-list
+    h6.rambling-sidebar-title 公開月別の記事一覧
+    .list-group
+        a(href='/blog', class=!filters.publishedYearMonth ? 'active' : false).list-group-item 全ての期間
+        each yearMonth in data.ramblingPublishedDates
+            - var yearMonthParam = yearMonth.replace("年", "").replace("月", "")
+            a(href='/blog/pub-ym/' + yearMonthParam, class=filters.publishedYearMonth && filters.publishedYearMonth == yearMonthParam ? 'active' : false).list-group-item= yearMonth

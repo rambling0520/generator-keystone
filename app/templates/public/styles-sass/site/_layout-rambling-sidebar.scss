@@ -1,0 +1,72 @@
+// rambling: サイドバー
+.rambling-sidebar-title {
+    margin-top: 30px;
+}
+
+.rambling-self-portrait {
+    text-align: center;
+}
+
+.rambling-mynameis {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    a {
+        color: darkslategray;
+    }
+}
+
+.rambling-profile-links {
+    margin: 5px 0px;
+    ul {
+        list-style: none;
+        li {
+            margin: 3px 0px;
+            i {
+                color: darkslategray;
+            }
+        }
+    }
+}
+
+.list-group-item {
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1px solid #f1f1f1;
+}
+
+// rambling: サイドバー（新着記事）
+.rambling-sidebar-new-post-list {
+    display: table;
+    width: 100%;
+    background: #FFF;
+    padding-left: 0px;
+    height: 86px;
+    max-height: 86px;
+}
+
+.rambling-sidebar-new-post-list-item {
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+}
+
+.rambling-new-post-brief {
+    word-wrap: break-word;
+    color: #a4b1c1;
+    padding-right: 10px;
+}
+
+.rambling-new-post-eyecatch {}
+
+// rambling: サイドバー（参照リンク）
+.rambling-reference-link {
+    font-size: 0.8em;
+    color: lightgray;
+    margin: -25px;
+}
+
+.rambling-sidebar-new-post-list-card {
+    margin-top: 20px;
+}

@@ -1,0 +1,63 @@
+//- rambling: 各ページのパンくずリストを定義
+mixin rambling-breadcrumbs
+    //- 各ページの表示名称を定義
+    - var ramblingBreadcrumbNameOfTop = 'Home'
+    - var ramblingBreadcrumbNameOfPost = '記事一覧'
+    - var ramblingBreadcrumbNameOfGallery = 'ギャラリー'
+    - var ramblingBreadcrumbNameOfContact = '問い合わせ'
+    - var ramblingBreadcrumbNameOfPrivacyPolicy = 'プライバシーポリシー'
+    - var ramblingBreadcrumbNameOfHtmlSitemap = 'サイトマップ'
+
+    //- 記事ページはTitleを用いるので設定しない
+
+    if section == 'blog'
+        //- 記事ページ
+        if data.post
+            nav.breadcrumb
+                a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                    i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+                a.breadcrumb-item.rambling-breadcrumbs-link(href="/blog")='＞' + ramblingBreadcrumbNameOfPost
+                span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + data.post.title
+        //- 記事一覧ページ
+        else 
+            nav.breadcrumb
+                //- カテゴリ指定がある場合
+                if data.category
+                    a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                        i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+                    span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfPost + '（' + data.category.name + '）'
+                //- 掲載月の指定がある場合
+                else if filters.publishedYearMonth
+                    a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                        i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+                    span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfPost + '（' + filters.publishedYearMonth + '）'
+                //- カテゴリ指定がない場合
+                else
+                    a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                        i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+                    span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfPost
+    //- ギャラリーページ
+    else if section == 'gallery'
+        nav.breadcrumb
+            a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+            span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfGallery
+    //- コンタクトページ
+    else if section == 'contact'
+        nav.breadcrumb
+            a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+            span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfContact
+    //- プラポリページ
+    else if section == 'privacy-policy'
+        nav.breadcrumb
+            a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+            span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfPrivacyPolicy
+    //- HTMLサイトマップページ
+    else if section == 'html-sitemap'
+        nav.breadcrumb
+            a.breadcrumb-item.rambling-breadcrumbs-link(href="/")
+                i.fas.fa-link=' ' + ramblingBreadcrumbNameOfTop
+            span.breadcrumb-item.rambling-breadcrumbs-link.active='＞' + ramblingBreadcrumbNameOfHtmlSitemap
+            

@@ -80,10 +80,11 @@ KeystoneGenerator.prototype.prompts = function prompts () {
 
 	var cb = this.async();
 
+	// rambling: autoモードのプロパティを変更
 	if (this.auto) {
-		this._projectName = 'Keystone Starter';
-		this.projectName = 'keystone-starter';
-		this.adminLogin = 'user@keystonejs.com';
+		this._projectName = 'ramblingcms';
+		this.projectName = 'ramblingcms';
+		this.adminLogin = 'ramblingcms@example.com';
 		this.adminPassword = 'admin';
 		this.viewEngine = 'pug';
 		this.preprocessor = 'sass';
@@ -110,12 +111,16 @@ KeystoneGenerator.prototype.prompts = function prompts () {
 				default: 'My Site',
 			}, {
 				name: 'viewEngine',
-				message: 'Would you like to use Pug, Nunjucks, Twig or Handlebars for templates? ' + (('[pug | nunjucks | twig | hbs]').grey),
+				// rambling: viewEngineはpugだけに限定
+				// message: 'Would you like to use Pug, Nunjucks, Twig or Handlebars for templates? ' + (('[pug | nunjucks | twig | hbs]').grey),
+				message: 'Would you like to use Pug for templates? ' + (('[pug]').grey),
 				default: 'pug',
 			}, {
 				name: 'preprocessor',
-				message: 'Which CSS pre-processor would you like? ' + (('[less | sass | stylus]').grey),
-				default: 'less',
+				// rambling: preprocessorをsassだけに限定
+				// message: 'Which CSS pre-processor would you like? ' + (('[sass]').grey),
+				message: 'Which CSS pre-processor would you like? ' + (('[sass]').grey),
+				default: 'sass',
 			}, {
 				type: 'confirm',
 				name: 'includeBlog',
@@ -323,6 +328,12 @@ KeystoneGenerator.prototype.project = function project () {
 	this.copy('gitignore', '.gitignore');
 	this.copy('Procfile');
 
+	// rambling: プロファイル変数定義ファイルの生成
+	this.copy('ramblingProfiles.js');
+
+	// rambling: lof4js用の設定ファイルの生成
+	this.copy('ramblingLog4jsConfig.js');
+
 };
 
 KeystoneGenerator.prototype.models = function models () {
@@ -360,6 +371,36 @@ KeystoneGenerator.prototype.routes = function routes () {
 	this.template('routes/_index.js', 'routes/index.js');
 	this.template('routes/_middleware.js', 'routes/middleware.js');
 
+	// rambling: json-ld 構築用のjsファイルを生成
+	this.copy('routes/ramblingJsonLd.js');
+
+	//　rambling: node-cache用のjsファイルを生成
+	this.copy('routes/ramblingCacheProvider.js');
+
+	// rambling: 記事ページの目次（Table of contents）生成用のjsファイルを生成
+	this.copy('routes/ramblingPostTOC.js');
+
+	// rambling: サムネイル付きリンク生成用のjsファイルを生成
+	this.copy('routes/ramblingPostThumbnailLinks.js');
+
+	// rambling: サムネイル付きリンク生成用のjsファイルを生成(AMPページ用)
+	this.copy('routes/ramblingPostThumbnailLinksAMP.js');
+
+	// rambling: XmlSitemap生成用のjsファイルを生成
+	this.copy('routes/ramblingXmlSitemap.js');
+
+	// rambling: サイトマップURLのping送信処理用のjsファイルを生成
+	this.copy('routes/ramblingXmlSitemapPublisher.js');
+
+	// rambling: HTML文字列のサニタイス用jsファイルを生成
+	this.copy('routes/ramblingHtmlSanitizer.js');
+
+	// rambling: シンジケーションフィード用のjsファイルを生成
+	this.copy('routes/ramblingSyndicationFeedsPublisher.js');
+	
+	// rambling: WebSub用のjsファイルを生成
+	this.copy('routes/ramblingWebSubPublisher.js');
+
 	if (this.includeEmail) {
 		this.template('routes/_emails.js', 'routes/emails.js');
 	}
@@ -369,6 +410,13 @@ KeystoneGenerator.prototype.routes = function routes () {
 	if (this.includeBlog) {
 		this.copy('routes/views/blog.js');
 		this.copy('routes/views/post.js');
+
+		// rambling: プライバシーポリシーページの生成
+		this.copy('routes/views/ramblingPrivacyPolicy.js');
+
+		// rambling: サイトマップページの生成
+		this.copy('routes/views/ramblingHtmlSitemap.js');
+
 	}
 
 	if (this.includeGallery) {
@@ -378,6 +426,9 @@ KeystoneGenerator.prototype.routes = function routes () {
 	if (this.includeEnquiries) {
 		this.copy('routes/views/contact.js');
 	}
+
+	// rambling: 共通のViewコンポーネント初期化処理のjsファイルを生成
+	this.copy('routes/views/ramblingCommonViewInitializer.js');
 
 };
 
@@ -452,11 +503,23 @@ KeystoneGenerator.prototype.templates = function templates () {
 		this.directory('templates/default-' + this.viewEngine + '/mixins', 'templates/mixins');
 		this.directory('templates/default-' + this.viewEngine + '/views/errors', 'templates/views/errors');
 
+		// rambling: includesフォルダ配下を生成
+		this.directory('templates/default-' + this.viewEngine + '/includes', 'templates/includes');
+
 		this.template('templates/default-' + this.viewEngine + '/views/index.' + this.viewEngine, 'templates/views/index.' + this.viewEngine);
 
 		if (this.includeBlog) {
 			this.copy('templates/default-' + this.viewEngine + '/views/blog.' + this.viewEngine, 'templates/views/blog.' + this.viewEngine);
 			this.copy('templates/default-' + this.viewEngine + '/views/post.' + this.viewEngine, 'templates/views/post.' + this.viewEngine);
+
+			// rambling: プライバシーポリシーページを生成
+			this.copy('templates/default-' + this.viewEngine + '/views/rambling-privacy-policy.' + this.viewEngine, 'templates/views/rambling-privacy-policy.' + this.viewEngine);
+
+			// rambling: HTMLサイトマップページを生成
+			this.copy('templates/default-' + this.viewEngine + '/views/rambling-html-sitemap.' + this.viewEngine, 'templates/views/rambling-html-sitemap.' + this.viewEngine);
+
+			// rambling: AMP用記事ページを生成
+			this.copy('templates/default-' + this.viewEngine + '/views/rambling-post-amp.' + this.viewEngine, 'templates/views/rambling-post-amp.' + this.viewEngine);
 		}
 
 		if (this.includeGallery) {
@@ -484,6 +547,9 @@ KeystoneGenerator.prototype.files = function files () {
 	this.directory('public/images');
 	this.directory('public/js');
 	this.copy('public/favicon.ico');
+
+	// rambling: robots.txtを作成
+	this.copy('public/robots.txt');
 
 	if (this.preprocessor === 'sass') {
 		this.directory('public/fonts', 'public/fonts/bootstrap');

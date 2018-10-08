@@ -1,0 +1,297 @@
+mixin rambling-html-head
+
+    //- スマホ向けのタッチアイコン設定
+    <link rel="apple-touch-icon" sizes="256x256" href="/images/apple-touch-icon.png">
+
+    //- シンジケーションフィードのURLを設定
+    link(rel="alternate" type="application/rss+xml" href=ramblingBaseUrl + 'feed.rss' title="RSS2.0")
+    link(rel="alternate" type="application/atom+xml" href=ramblingBaseUrl + 'feed.atom' title="Atom1.0")
+
+    //- meta tags (top page)
+    if section == 'home'
+        //- tdk
+        title=ramblingSiteTitle + ramblingSiteTitleSeparator + ramblingSiteThemeText
+        meta(name="description" content=ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="keywords" content=ramblingSiteKeywords)
+        //- og
+        meta(property="og:title" content=ramblingSiteTitle + ramblingSiteTitleSeparator + ramblingSiteThemeText)
+        meta(property="og:description" content=ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+        meta(property="og:url" content=ramblingBaseUrl)
+        meta(property="og:type" content='website')
+
+        //- twitter
+        meta(name="twitter:title" content=ramblingSiteTitle + ramblingSiteTitleSeparator + ramblingSiteThemeText)
+        meta(name="twitter:description" content=ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+        meta(name="twitter:url" content=ramblingBaseUrl)
+
+        //- canonical
+        link(rel="canonical" href=ramblingBaseUrl)
+
+    else if section == 'blog'
+        //- meta tags (記事ページ)
+        if data.ramblingIsPostPage
+            if data.post
+                //- title(seo,og,twitter)
+                if data.post.meta.title
+                    //- 記事ページ個別のメタタイトルが設定されている場合
+                    title=data.post.meta.title + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content=data.post.meta.title + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content=data.post.meta.title + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                else
+                    //- 設定されていない場合
+                    title=data.post.title + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content=data.post.title + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content=data.post.title + ramblingSiteTitleSeparator + ramblingSiteTitle)
+
+                //- description(seo,og,twitter)
+                if data.post.meta.description
+                    //- 記事ページ個別のメタディスクリプションが設定されている場合
+                    meta(name="description" content=data.post.meta.description + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(property="og:description" content=data.post.meta.description + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:description" content=data.post.meta.description + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                else
+                    //- 設定されていない場合
+                    meta(name="description" content=data.post.brief + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(property="og:description" content=data.post.brief + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:description" content=data.post.brief + ramblingSiteTitleSeparator + ramblingSiteTitle)
+
+                //- og
+                meta(property="og:type" content="article")
+                meta(property="og:image" content=data.post.image.url)
+                meta(property="og:url" content=data.post.ramblingFullPostUrl)
+
+                //- twitter
+                meta(name="twitter:card" content="summary_large_image")
+                meta(name="twitter:image:src" content=data.post.image.url)
+                meta(name="twitter:url" content=data.post.ramblingFullPostUrl)
+                
+                //- keywords
+                - var postKeywords = ''
+                each item, index in data.post.categories
+                    meta(property="article:tag" content=item.name)
+                    - postKeywords = item.name + ',' + postKeywords
+                
+                if data.post.meta.keywords
+                    //- 記事ページ個別のメタキーワードが設定されている場合
+                    meta(name="keywords" content=postKeywords + data.post.meta.keywords)
+                else
+                    //- 設定されていない場合
+                    meta(name="keywords" content=postKeywords + ramblingSiteKeywords)
+                
+                //- publishedTime
+                meta(property="article:published_time" content=data.post.publishedDate)
+
+                //- canonical
+                link(rel="canonical" href=data.post.ramblingFullPostUrl)
+
+                //- 非AMPページからAMPページへのamphtmlリンク（プロファイル変数で利用設定されている場合のみ）
+                if ramblingIsAmpEnabled && !data.post.ramblingIsAmpPage
+                    link(rel='amphtml' href=data.post.ramblingFullAmpPostUrl)
+                
+                //- meta robots
+                if data.post.meta.robots == 'noindex'
+                    meta(name="robots" content="noindex,nofollow")
+            else
+                //- 記事が表示できない場合、noindex設定する
+                title='記事が表示できません' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                meta(name="robots" content="noindex,nofollow")
+
+        //- meta tags (記事一覧ページ)
+        if data.ramblingIsPostListPage
+            if !data.posts.results.length
+                //- 記事が0件の場合、noindex設定する
+                meta(name="robots" content="noindex,nofollow")
+
+            if data.category
+                //- 記事一覧ページ（カテゴリ指定あり）
+
+                //- tdk
+                meta(name="description" content='記事一覧' + '（' + data.category.name + '）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="keywords" content='記事一覧' + ',' + data.category.name + ',' + ramblingSiteKeywords)
+
+                //- og
+                meta(property="og:description" content='記事一覧' + '（' + data.category.name + '）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+                meta(property="og:url" content=ramblingBaseUrl + 'blog/' + data.category.key)
+                meta(property="og:type" content="article")
+
+                //- twitter
+                meta(name="twitter:description" content='記事一覧' + '（' + data.category.name + '）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+                meta(name="twitter:url" content=ramblingBaseUrl + 'blog/' + data.category.key)
+
+                //- canonical・title
+                if data.posts.currentPage == 1
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog/' + data.category.key)
+                    title='記事一覧' + '（' + data.category.name + '）' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧' + '（' + data.category.name + '）' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧' + '（' + data.category.name + '）' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                else
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog/' + data.category.key + '?page=' + data.posts.currentPage)
+                    title='記事一覧' + '（' + data.category.name + '）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧' + '（' + data.category.name + '）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧' + '（' + data.category.name + '）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+
+                //- 記事一覧のページネーションに従い、prev、nextを設定
+                if data.posts.totalPages > 1
+                    if data.posts.previous
+                        link(href=ramblingBaseUrl + 'blog/' + data.category.key + '?page=' + data.posts.previous rel="prev")
+                    if data.posts.next
+                        link(href=ramblingBaseUrl + 'blog/' + data.category.key + '?page=' + data.posts.next rel="next")
+            
+            else if filters.publishedYearMonth
+                //- 記事ページ（掲載月の指定あり）
+
+                //- tdk
+                meta(name="description" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="keywords" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ramblingSiteKeywords)
+
+                //- og
+                meta(property="og:description" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+                meta(property="og:url" content=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth)
+                meta(property="og:type" content="article")
+
+                //- twitter
+                meta(name="twitter:description" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+                meta(name="twitter:url" content=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth)
+
+                //- canonicalとtitle（ページネーション対応）
+                if data.posts.currentPage == 1
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth)
+                    title='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                else
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth + '?page=' + data.posts.currentPage)
+                    title='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧（' + filters.publishedYearMonth.substr(0,4) + '年' + filters.publishedYearMonth.substr(4,2) + '月）' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+
+                //- 記事一覧のページネーションに従い、prev、nextを設定
+                if data.posts.totalPages > 1
+                    if data.posts.previous
+                        link(href=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth + '?page=' + data.posts.previous rel="prev")    
+                    if data.posts.next
+                        link(href=ramblingBaseUrl + 'blog/pub-ym/' + filters.publishedYearMonth + '?page=' + data.posts.next rel="next")
+
+            else
+                //- 記事一覧ページ（カテゴリ指定無し）
+
+                //- tdk
+                meta(name="description" content='記事一覧' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="keywords" content='記事一覧' + ',' + ramblingSiteKeywords)
+
+                //- og
+                meta(property="og:description" content='記事一覧' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+                meta(property="og:url" content=ramblingBaseUrl + 'blog')
+                meta(property="og:type" content="article")
+
+                //- twitter
+                meta(name="twitter:description" content='記事一覧' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+                meta(name="twitter:url" content=ramblingBaseUrl + 'blog')
+
+                //- canonical
+                if data.posts.currentPage == 1
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog')
+                    title='記事一覧' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                else   
+                    link(rel="canonical" href=ramblingBaseUrl + 'blog' + '?page=' + data.posts.currentPage)
+                    title='記事一覧' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle
+                    meta(property="og:title" content='記事一覧' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                    meta(name="twitter:title" content='記事一覧' + ' ' + data.posts.currentPage + 'ページ目' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+                
+                //- 記事一覧のページネーションに従い、prev、nextを設定
+                if data.posts.totalPages > 1
+                    if data.posts.previous
+                        link(href=ramblingBaseUrl + 'blog' + '?page=' + data.posts.previous rel="prev")
+                    if data.posts.next
+                        link(href=ramblingBaseUrl + 'blog' + '?page=' + data.posts.next rel="next")
+
+    //- meta tags (gallery)
+    else if section == 'gallery'
+        title='ギャラリーページ' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        meta(name="description" content='ギャラリーページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="keywords" content=ramblingSiteKeywords)
+        //- og
+        meta(property="og:title" content='ギャラリーページ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:description" content='ギャラリーページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+        meta(property="og:url" content=ramblingBaseUrl + 'gallery')
+        meta(property="og:type" content="article")
+        //- twitter
+        meta(name="twitter:title" content='ギャラリーページ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:description" content='ギャラリーページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+        meta(name="twitter:url" content=ramblingBaseUrl + 'gallery')
+
+        //- canonical
+        link(rel="canonical" href=ramblingBaseUrl + 'gallery')
+
+    //- meta tags (contact)
+    else if section == 'contact'
+        title='コンタクトページ' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        meta(name="description" content='コンタクトページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="keywords" content=ramblingSiteKeywords)
+        //- og
+        meta(property="og:title" content='コンタクトページ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:description" content='コンタクトページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+        meta(property="og:url" content=ramblingBaseUrl　+ 'contact')
+        meta(property="og:type" content="article")
+        //- twitter
+        meta(name="twitter:title" content='コンタクトページ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:description" content='コンタクトページ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+        meta(name="twitter:url" content=ramblingBaseUrl　+ 'contact')
+
+        //- canonical
+        link(rel="canonical" href=ramblingBaseUrl + 'contact')
+
+    //- meta tags (プライバシーポリシー)
+    else if section == 'privacy-policy'
+        title='プライバシーポリシー' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        meta(name="description" content='プライバシーポリシー' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="keywords" content=ramblingSiteKeywords)
+        //- og
+        meta(property="og:title" content='プライバシーポリシー' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:description" content='プライバシーポリシー' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+        meta(property="og:url" content=ramblingBaseUrl　+ 'privacy-policy')
+        meta(property="og:type" content="article")
+        //- twitter
+        meta(name="twitter:title" content='プライバシーポリシー' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:description" content='プライバシーポリシー' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+        meta(name="twitter:url" content=ramblingBaseUrl　+ 'privacy-policy')
+
+        //- canonical
+        link(rel="canonical" href=ramblingBaseUrl + 'privacy-policy')
+
+    //- meta tags (HTMLサイトマップ)
+    else if section == 'html-sitemap'
+        title='サイトマップ' + ramblingSiteTitleSeparator + ramblingSiteTitle
+        meta(name="description" content='サイトマップ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="keywords" content=ramblingSiteKeywords)
+        //- og
+        meta(property="og:title" content='サイトマップ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:description" content='サイトマップ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(property="og:image" content=ramblingBaseUrl + 'images/logo.png')
+        meta(property="og:url" content=ramblingBaseUrl　+ 'html-sitemap')
+        meta(property="og:type" content="article")
+        //- twitter
+        meta(name="twitter:title" content='サイトマップ' + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:description" content='サイトマップ' + '。' + ramblingSiteDescription + ramblingSiteTitleSeparator + ramblingSiteTitle)
+        meta(name="twitter:image:src" content=ramblingBaseUrl + 'images/logo.png')
+        meta(name="twitter:url" content=ramblingBaseUrl　+ 'html-sitemap')
+
+        //- canonical
+        link(rel="canonical" href=ramblingBaseUrl + 'html-sitemap')
+

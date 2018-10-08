@@ -1,0 +1,19 @@
+//- rambling: フッターにリンクを表示
+include ../mixins/rambling-footer-copyrights
+
+mixin rambling-footer-nav
+    #footer.container-fluid
+        .row.rambling-footer-nav-row
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl) ホーム
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+'blog') 記事一覧
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+ramblingSpRecommendedLink) おすすめ
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+'gallery') 自己紹介
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+'contact') 問い合わせ
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+'privacy-policy') プライバシーポリシー
+            .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href=ramblingBaseUrl+'html-sitemap') サイトマップ
+            if data.ramblingFooterNavCats && data.ramblingFooterNavCats.length
+                each cat in data.ramblingFooterNavCats
+                    .col-sm-3.col-xs-12.rambling-footer-nav-link: a(href='/blog/' + cat.key)= cat.name
+                    
+        //- rambling: コピーライト用のmixinを読み込み
+        +rambling-footer-copyrights
