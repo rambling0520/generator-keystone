@@ -1,8 +1,10 @@
 # RamblingCMS (A Customized KeystoneJS Project) Generator
 
-[KeystoneJS](http://keystonejs.com)をベースに作成したカスタムテンプレートである「RamblingCMS」の[Yeoman](http://yeoman.io) ジェネレーターです。
+[KeystoneJS](http://keystonejs.com)用のカスタムテンプレートである「RamblingCMS」の[Yeoman](http://yeoman.io) ジェネレーターです。
 
 `yo ramblinｖgcms-on-keystonejs`を実行することで、RamblingCMSプロジェクトが生成され、様々なSEO対策や支援機能を持つNode.jsベースのブログ向けCMSをすぐに構築することができます。
+
+どのようなサイトにも共通して必要なSEO対策やコンテンツ作成支援機能（WordPressのショートコードに相当）が実装されており、サイト制作の工数が削減できるものと思います。
 
 ## 利用手順
 

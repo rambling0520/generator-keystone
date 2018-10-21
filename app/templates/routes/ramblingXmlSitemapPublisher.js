@@ -9,7 +9,7 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('out');
 
 let ramblingCacheProvider = require('./ramblingCacheProvider');
-const RAMBLING_SITEMAP_PUBLISHER_CACHE_DURATION = 3600;
+const RAMBLING_SITEMAP_PUBLISHER_CACHE_DURATION = 3600 * 24;
 
 let keystone;
 let sitemapUrl;
@@ -26,8 +26,8 @@ exports.startCronJob = function (ks) {
 
     // ジョブの定義
     var publishXmlSitemapJob = new CronJob({
-        // 60分おきに実行される
-        cronTime: '0 */60 * * * *',
+        // 30分おきに実行される
+        cronTime: '0 */30 * * * *',
         // 引数なしの関数オブジェクトである必要あり
         onTick: submitSitemap,
         start: false,

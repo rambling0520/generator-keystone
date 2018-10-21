@@ -8,6 +8,11 @@ exports.buildPostThumbnailLinks = function (postExtended) {
     // cheerioのDOMオブジェクト生成
     const $ = cheerio.load(postExtended);
 
+    // 通常ページ用広告を削除して、AMPページ用広告（amp-ad）を残す
+    $('div.rambling-ad-switch > div.rambling-ad-normal').each(function(){
+        $(this).remove();
+    });
+
     // サムネイル付きリンク生成
     // コンテンツHTML（引数）をパースしてサムネイル付きリンクの設定箇所を取得
     // 取得条件は、"rambling-link-box"クラスが付与されており、data-link属性が設定されているdiv要素であること

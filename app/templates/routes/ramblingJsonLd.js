@@ -17,9 +17,9 @@ exports.buildJsonLdOfHome = function (url, title, desc, imageUrl, authorName, pr
         '},' +
         '"author": {' +
         '"@type": "' + 'Person' + '",' +
-        '"@id": "' + url + '/#maker"' +
-        '"name": "' + authorName + '"' +
-        '"url": "' + profileUrl + '"' +
+        '"@id": "' + url + '/#maker",' +
+        '"name": "' + authorName + '",' +
+        '"url": "' + profileUrl + '",' +
         '"image": "' + profileImageUrl + '"' +
         '}' +
         '},' +
@@ -29,7 +29,7 @@ exports.buildJsonLdOfHome = function (url, title, desc, imageUrl, authorName, pr
         '"@context": "http://schema.org",' +
         '"@type": "Organization",' +
         '"@id": "' + url + '#org",' +
-        '"@name": "' + 'text",' +
+        '"name": "' + 'text",' +
         '"logo": {' +
         '"@type": "' + 'ImageObject' + '",' +
         '"@id": "' + url + '#logo",' +
@@ -65,9 +65,9 @@ exports.buildJsonLdOfPost = function (baseUrl, postUrl, profileUrl, profileImage
         '},' +
         '"author": {' +
         '"@type": "' + 'Person' + '",' +
-        '"@id": "' + postUrl + '/#maker"' +
-        '"name": "' + authorName + '"' +
-        '"url": "' + profileUrl + '"' +
+        '"@id": "' + postUrl + '/#maker",' +
+        '"name": "' + authorName + '",' +
+        '"url": "' + profileUrl + '",' +
         '"image": "' + profileImageUrl + '"' +
         '}' +
         '},' +
@@ -81,17 +81,31 @@ exports.buildJsonLdOfPost = function (baseUrl, postUrl, profileUrl, profileImage
         '"@type": "' + 'ListItem' + '",' +
         '"position": 1,' +
         '"item": {' +
-        '"@id": "' + urlbc1 + '"' +
+        '"@id": "' + urlbc1 + '",' +
+        '"name": "トップページ"' +
         '}' +
         '},' +
         '{' +
         '"@type": "' + 'ListItem' + '",' +
         '"position": 2,' +
         '"item": {' +
-        '"@id": "' + urlbc2 + '"' +
+        '"@id": "' + urlbc2 + '",' +
+        '"name": "記事一覧ページ"' +
         '}' +
         '}' +
         ']' +
+        '},' +
+        // Organization
+        '{' +
+        '"@context": "http://schema.org",' +
+        '"@type": "Organization",' +
+        '"@id": "' + urlbc1 + '#org",' +
+        '"name": "' + 'text",' +
+        '"logo": {' +
+        '"@type": "' + 'ImageObject' + '",' +
+        '"@id": "' + urlbc1 + '#logo",' +
+        '"url": "' + imageUrl + '"' +
+        '}' +
         '}' +
         ']';
 
@@ -117,8 +131,8 @@ exports.buildJsonLdOfPostList = function (baseUrl, url, title, desc, imageUrl, a
         '"author": {' +
         '"@type": "' + 'Person' + '",' +
         '"@id": "' + url + '",' +
-        '"name": "' + authorName + '"' +
-        '"url": "' + profileUrl + '"' +
+        '"name": "' + authorName + '",' +
+        '"url": "' + profileUrl + '",' +
         '"image": "' + profileImageUrl + '"' +
         '}' +
         '},' +
@@ -132,7 +146,8 @@ exports.buildJsonLdOfPostList = function (baseUrl, url, title, desc, imageUrl, a
         '"@type": "' + 'ListItem' + '",' +
         '"position": 1,' +
         '"item": {' +
-        '"@id": "' + urlbc1 + '"' +
+        '"@id": "' + urlbc1 + '",' +
+        '"name": "トップページ"' +
         '}' +
         '}' +
         ']' +
@@ -162,8 +177,8 @@ exports.buildJsonLdOfGallery = function (baseUrl, url, title, desc, imageUrl, au
         '"author": {' +
         '"@type": "' + 'Person' + '",' +
         '"@id": "' + url + '",' +
-        '"name": "' + authorName + '"' +
-        '"url": "' + profileUrl + '"' +
+        '"name": "' + authorName + '",' +
+        '"url": "' + profileUrl + '",' +
         '"image": "' + profileImageUrl + '"' +
         '}' +
         '},' +
@@ -177,7 +192,8 @@ exports.buildJsonLdOfGallery = function (baseUrl, url, title, desc, imageUrl, au
         '"@type": "' + 'ListItem' + '",' +
         '"position": 1,' +
         '"item": {' +
-        '"@id": "' + urlbc1 + '"' +
+        '"@id": "' + urlbc1 + '",' +
+        '"name": "トップページ"' +
         '}' +
         '}' +
         ']' +
@@ -206,8 +222,8 @@ exports.buildJsonLdOfContact = function (baseUrl, url, title, desc, imageUrl, au
         '"author": {' +
         '"@type": "' + 'Person' + '",' +
         '"@id": "' + url + '",' +
-        '"name": "' + authorName + '"' +
-        '"url": "' + profileUrl + '"' +
+        '"name": "' + authorName + '",' +
+        '"url": "' + profileUrl + '",' +
         '"image": "' + profileImageUrl + '"' +
         '}' +
         '},' +
@@ -221,7 +237,8 @@ exports.buildJsonLdOfContact = function (baseUrl, url, title, desc, imageUrl, au
         '"@type": "' + 'ListItem' + '",' +
         '"position": 1,' +
         '"item": {' +
-        '"@id": "' + urlbc1 + '"' +
+        '"@id": "' + urlbc1 + '",' +
+        '"name": "トップページ"' +
         '}' +
         '}' +
         ']' +

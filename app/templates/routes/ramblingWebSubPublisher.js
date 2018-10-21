@@ -9,7 +9,7 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('out');
 
 let ramblingCacheProvider = require('./ramblingCacheProvider');
-const RAMBLING_WEBSUB_PUBLISHER_CACHE_DURATION = 3600;
+const RAMBLING_WEBSUB_PUBLISHER_CACHE_DURATION = 3600 * 24;
 
 let keystone;
 

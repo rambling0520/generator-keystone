@@ -73,8 +73,10 @@ keystone.init({
 		force_br_newlines : true, 
 		force_p_newlines : true, 
 		relative_urls : false, 
-		convert_urls: false
+		convert_urls: false,
+		valid_elements: '*[*]'
 	},
+	'wysiwyg cloudinary images': true,
 	// rambling: アクセスログ（morgan）のフォーマットを指定
 	"logger": ':remote-user [:date[iso]] :remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
 });
@@ -219,6 +221,27 @@ let ramblingCacheProvider = require('./routes/ramblingCacheProvider');
 ramblingCacheProvider.start(function(err) {
     if (err) console.error(err);
 });
+
+// rambling: nodeｰsassでAMPページ用のCSSをコンパイル
+if (ramblingProfiles.isAmpEnabled){
+
+	var sass = require('node-sass');
+
+	var result = sass.renderSync({
+		file: 'public/styles/rambling-site-amp.scss',
+		outputStyle: 'compressed',
+		outFile: 'public/styles/rambling-site-amp.css'
+		});
+		 	
+	var fs = require('fs');
+	fs.writeFile('public/styles/rambling-site-amp.css', result.css, function(err){
+		if(!err){
+			logger.info('AMPページ用CSSファイルをコンパイルしました');
+		} else {
+			logger.error('AMPページ用CSSファイルのコンパイルに失敗しました');
+		}
+	});
+}
 
 // rambling: XmlSitemapのping送信処理を開始
 if (ramblingProfiles.isSitemapPublished){

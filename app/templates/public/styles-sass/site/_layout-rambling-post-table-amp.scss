@@ -1,0 +1,63 @@
+.rambling-post-table {
+    font-size: 16px;
+    overflow-x: auto;
+    min-height: 0.01%;
+    white-space: nowrap;
+}
+
+.rambling-post-table:-webkit-scrollbar {
+    height:5px;
+}
+.rambling-post-table::-webkit-scrollbar-track{
+    background: #F1F1F1;
+}
+.rambling-post-table::-webkit-scrollbar-thumb {
+    background: #BCBCBC;
+}
+
+@media screen and (max-width: 767px) {
+    .rambling-post-table {
+        width: 100%;
+        margin-bottom: 15px;
+        overflow-y: hidden;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        /* border: 1px solid #ddd; */
+    }    
+}
+
+.table>thead>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>th,
+.table>tbody>tr>td,
+.table>tfoot>tr>th,
+.table>tfoot>tr>td {
+    padding: 8px;
+    line-height: 1.42857;
+    vertical-align: top;
+    /* border-top: 1px solid #ddd; */
+}
+
+.table>thead>tr>th {
+    vertical-align: bottom;
+    /* border-bottom: 2px solid #ddd; */
+}
+
+.table>caption+thead>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>th,
+.table>thead:first-child>tr:first-child>td {
+    border-top: 0;
+}
+
+/* 基本の背景色と文字列 */
+table tr td {
+    background: #eaf3f5;
+    color: #333333;
+}
+
+/* 偶数行の背景色 */
+table tr:nth-of-type(2n+2) td {
+    background: #ffffff;
+}
